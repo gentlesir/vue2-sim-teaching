@@ -1,0 +1,13 @@
+# 临时验证与截图产物，不进版本库
+_shots/
+.workbuddy/
+_shots/
+*.png
+~$*
+# 编辑器与系统杂物
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+# 本地依赖（本项目零依赖，正常不该有）
+node_modules/

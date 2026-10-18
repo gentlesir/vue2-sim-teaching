@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前端组件语法教学与智能测试系统</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c212b;
+  --border: #262c38;
+  --text: #e6e9ef;
+  --text-dim: #8b93a7;
+  --accent: #2f9e7d;
+  --accent-dark: #2c3e50;
+  --red: #ff5c6c;
+  --yellow: #ffcc66;
+  --mono: Consolas, "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden;   
+}
+.app { display: flex; flex-direction: column; height: 100%; }
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+.topbar .logo {
+  font-weight: 700; font-size: 14px; color: var(--accent);
+  letter-spacing: .5px;
+}
+.topbar .logo span { color: var(--text-dim); font-weight: 400; font-size: 12px; margin-left: 6px; }
+.topbar .spacer { flex: 1; }
+.user-info {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 14px;
+  margin-left: 6px; padding-left: 14px;
+  border-left: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim);
+  min-width: 0;
+}
+.user-info i { font-style: normal; }
+.user-info .v {
+  font-family: var(--mono);
+  color: #c3cada;
+  margin-left: 4px;
+}
+.user-info .at { color: var(--accent); }
+button.btn.logout {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+button.btn.logout:hover {
+  filter: none;
+  color: var(--red);
+  border-color: var(--red);
+  background: rgba(255,92,108,.08);
+}
+
+button.btn {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: filter .15s ease;
+}
+button.btn:hover { filter: brightness(1.12); }
+button.btn.ghost {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+a.btn {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px 14px;
+  text-decoration: none;
+  display: inline-block;
+  transition: filter .15s ease;
+}
+a.btn:hover { filter: brightness(1.35); }
+
+.main { display: flex; flex: 1; min-height: 0; }
+
+.kb-pane {
+  width: 230px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--panel);
+  min-height: 0;
+}
+.kb-head {
+  padding: 9px 14px; font-size: 12px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  letter-spacing: .3px;
+}
+.kb-body { flex: 1; overflow: auto; padding: 6px 0 14px; }
+.kb-group-title {
+  padding: 8px 14px; font-size: 12.5px; font-weight: 600;
+  color: #c3cada; cursor: pointer; user-select: none;
+}
+.kb-group-title:hover { background: var(--panel-2); }
+.kb-group-title .arrow { font-size: 9px; color: var(--text-dim); display: inline-block; width: 12px; }
+.kb-group.collapsed .arrow { transform: rotate(-90deg); }
+.kb-group.collapsed .kb-items { display: none; }
+.kb-item {
+  padding: 6px 14px 6px 30px; font-size: 12px; color: #9aa3b8;
+  cursor: pointer; line-height: 1.5;
+  border-left: 2px solid transparent;
+}
+.kb-item:hover { color: var(--text); background: var(--panel-2); }
+.kb-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(47,158,125,.08); }
+.kb-item .d { font-size: 11px; color: #5d6a85; display: block; }
+
+.editor-pane {
+  flex: 1;
+  display: flex; flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--border);
+}
+.editor-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim);
+  flex-shrink: 0;
+}
+.editor-head .fname {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-weight: 600;
+}
+.editor-head .hint { margin-left: auto; font-size: 11px; }
+.editor-wrap {
+  position: relative; flex: 1; min-height: 0;
+  background: #12151c;
+}
+.editor-wrap textarea {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  resize: none; border: none; outline: none;
+  background: transparent;
+  color: transparent;      
+  caret-color: #fff;       
+  font-family: var(--mono);
+  font-size: 13px; line-height: 1.55;
+  padding: 12px 14px;
+  white-space: pre;
+  overflow: auto;
+  cursor: text;
+  z-index: 2;
+}
+.editor-wrap pre {
+  position: absolute; inset: 0;
+  margin: 0; padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 13px; line-height: 1.55;
+  white-space: pre;
+  overflow: auto;
+  color: #c9d1e3;
+  z-index: 1;
+  pointer-events: none;    
+}
+.editor-wrap pre code { font-family: inherit; }
+.tok-tag { color: #7ee787; }
+.tok-attr { color: #79c0ff; }
+.tok-str { color: #ffa657; }
+.tok-kw { color: #ff7b72; }
+.tok-num { color: #f2cc60; }
+.tok-cmt { color: #8b949e; font-style: italic; }
+.tok-mustache { color: #d2a8ff; font-weight: 600; }
+.tok-block { color: #ff7b72; font-weight: 700; }
+.tok-comp { color: #2f9e7d; font-weight: 600; }
+
+.preview-pane {
+  width: 390px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  background: var(--panel);
+}
+.preview-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim);
+  flex-shrink: 0;
+}
+.phone {
+  flex: 1;
+  margin: 14px auto;
+  width: 340px;
+  max-width: calc(100% - 28px);
+  background: #ffffff;
+  border-radius: 26px;
+  border: 8px solid #1c212b;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0,0,0,.45);
+}
+.phone-status {
+  height: 24px; background: #f2f3f5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #999; flex-shrink: 0;
+  font-family: var(--mono);
+}
+.phone-screen {
+  flex: 1; overflow: auto;
+  background: #fff;
+  color: #333;
+  position: relative;
+}
+
+.console-pane {
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  height: 150px;
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+}
+.console-head {
+  padding: 6px 14px; font-size: 11.5px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.console-head .cnt { margin-left: auto; }
+.console-body { flex: 1; overflow: auto; padding: 6px 0; font-family: var(--mono); font-size: 12px; }
+.log-line { padding: 3px 14px; display: flex; gap: 8px; align-items: baseline; }
+.log-line .tag { flex-shrink: 0; font-size: 10px; padding: 0 6px; border-radius: 4px; }
+.log-line.info .tag { background: rgba(47,158,125,.15); color: #2f9e7d; }
+.log-line.error .tag { background: rgba(255,92,108,.15); color: #ff5c6c; }
+.log-line.warn .tag { background: rgba(255,204,102,.15); color: #ffcc66; }
+.log-line .msg { color: #c9d1e3; word-break: break-all; white-space: pre-wrap; }
+</style>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'sfc_user';
+
+  function toLogin() {
+    window.SFC_BLOCKED = true;
+    window.location.replace('login.html');   
+  }
+
+  var raw;
+  try {
+    raw = window.localStorage.getItem(KEY);
+  } catch (e) {
+    toLogin();   
+    return;
+  }
+  if (!raw) { toLogin(); return; }
+
+  var user;
+  try {
+    user = JSON.parse(raw);
+  } catch (e) {
+    toLogin();   
+    return;
+  }
+  if (!user || !user.account || !user.name || !user.phone) { toLogin(); return; }
+
+  window.SFC_USER_KEY = user;   
+})();
+</script>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="logo">前端组件语法教学与智能测试系统<span></span></div>
+    <div class="user-info" id="userInfo"></div>
+    <div class="spacer"></div>
+    <a class="btn" href="test.html" title="挖空补全代码，自动判分">&#128221; 知识点测试</a>
+    <button class="btn ghost" id="btnClear">清空</button>
+    <button class="btn" id="btnRun">&#9654; 运行 (Ctrl+Enter)</button>
+    <button class="btn logout" id="btnLogout">退出登录</button>
+  </div>
+  <div class="main">
+    <div class="kb-pane">
+      <div class="kb-head">&#128218; 知识点大纲（点击载入案例）</div>
+      <div class="kb-body" id="kbBody"></div>
+    </div>
+    <div class="editor-pane">
+      <div class="editor-head">
+        <span class="fname">App.vue</span>
+        <span class="hint">支持插值 / v-if / v-for / v-model / @事件 / :绑定 / computed / watch / components</span>
+      </div>
+      <div class="editor-wrap">
+        <pre aria-hidden="true"><code id="hlCode"></code></pre>
+        <textarea id="codeEditor" spellcheck="false" autocomplete="off"></textarea>
+      </div>
+    </div>
+    <div class="preview-pane">
+      <div class="preview-head">&#128241; UI 预览</div>
+      <div class="phone">
+        <div class="phone-status">组件语法 Sim &middot; 340 &times; auto</div>
+        <div class="phone-screen" id="previewScreen"></div>
+      </div>
+    </div>
+  </div>
+  <div class="console-pane">
+    <div class="console-head">&#128424; 控制台 <span class="cnt" id="logCount">0 条</span></div>
+    <div class="console-body" id="consoleBody"></div>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var box = document.getElementById('userInfo');
+  var btnLogout = document.getElementById('btnLogout');
+  var u = window.SFC_USER_KEY;
+
+  if (btnLogout) {
+    btnLogout.addEventListener('click', function () {
+      var who = u ? u.name : '当前账号';
+      if (!window.confirm('确定退出 ' + who + ' 的登录吗？')) return;
+      try {
+        window.localStorage.removeItem('sfc_user');
+      } catch (e) {
+      }
+      window.location.replace('login.html');
+    });
+  }
+
+  if (!box || !u) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function item(label, value) {
+    return '<i>' + label + '</i><i class="v">' + esc(value) + '</i>';
+  }
+
+  box.innerHTML =
+    '<i class="at">&#9679;</i>' +
+    item('账号', u.account) +
+    item('姓名', u.name) +
+    item('手机号', u.phone);
+
+  box.title = '登录时间：' + (u.loginTimeText || new Date(u.loginTime || 0).toLocaleString());
+  if (btnLogout) btnLogout.title = '当前登录：' + u.name + '（' + u.account + '）';
+})();
+</script>
+<script src="js/sfc-parser.js"><script src="js/sfc-parser.js"></script></script>
+<script src="js/template-compiler.js"><script src="js/template-compiler.js"></script></script>
+<script src="js/reactivity.js"><script src="js/reactivity.js"></script></script>
+<script src="js/instance.js"><script src="js/instance.js"></script></script>
+<script src="js/renderer.js"><script src="js/renderer.js"></script></script>
+<script src="js/main.js"><script src="js/main.js"></script></script>
+<script src="js/knowledge.json"><script src="js/knowledge.json"></script></script>
+<script src="js/knowledge.js"><script src="js/knowledge.js"></script></script>
+<script src="js/syntax-highlight.js"><script src="js/syntax-highlight.js"></script></script>
+<script src="js/editor-enhance.js"><script src="js/editor-enhance.js"></script></script>
+<script src="js/app.js"><script src="js/app.js"></script></script>
+</body>
+</html>

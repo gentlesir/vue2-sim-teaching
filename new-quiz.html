@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前端组件语法教学与智能测试系统</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c212b;
+  --border: #262c38;
+  --text: #e6e9ef;
+  --text-dim: #8b93a7;
+  --accent: #2f9e7d;
+  --red: #ff5c6c;
+  --yellow: #ffcc66;
+  --mono: Consolas, "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); overflow: hidden;
+}
+.app { display: flex; flex-direction: column; height: 100%; }
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px; border-bottom: 1px solid var(--border);
+  background: var(--panel); flex-shrink: 0;
+}
+.topbar .logo { font-weight: 700; font-size: 16px; color: var(--accent); letter-spacing: .5px; }
+.topbar .logo span { color: var(--text-dim); font-weight: 400; font-size: 14px; margin-left: 6px; }
+.topbar .spacer { flex: 1; }
+
+button.btn, a.btn {
+  font-family: var(--sans); font-size: 14.5px; color: #fff;
+  background: var(--accent); border: none; border-radius: 7px;
+  padding: 7px 14px; cursor: pointer; text-decoration: none;
+  display: inline-block; transition: filter .15s ease;
+}
+button.btn:hover, a.btn:hover { filter: brightness(1.12); }
+button.btn.ghost, a.btn.ghost { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+button.btn.sm { padding: 5px 12px; border-radius: 6px; }
+button.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+
+.main { display: flex; flex: 1; min-height: 0; }
+.left-pane, .right-pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding-bottom: 20px;}
+.left-pane { flex: 1; border-right: 1px solid var(--border); overflow: auto; }
+.right-pane { width: 520px; flex-shrink: 0; background: var(--panel); }
+.pane-head {
+  padding: 9px 14px; font-size: 14.5px; color: #c3cada;
+  border-bottom: 1px solid var(--border); background: var(--panel); flex-shrink: 0;
+}
+.pane-head b { color: var(--accent); }
+.pane-head .k { font-family: var(--mono); color: var(--yellow); }   
+.pane-head .live { display: block; margin-top: 4px; font-family: var(--mono); font-size: 14px; color: var(--text-dim); }
+.pane-head .live.warn { color: var(--red); }
+.pane-head .ro { display: inline-block; margin: 0 6px; padding: 1px 8px; border-radius: 10px; background: rgba(255,204,102,.15); color: var(--yellow); font-size: 13px; }
+.pane-sub {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; font-size: 14px; color: var(--text-dim);
+  background: var(--panel); border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.pane-sub .grow { flex: 1; }
+textarea {
+  display: block; width: 100%; border: none; outline: none; resize: none;
+  background: #12151c; color: #c9d1e3;
+  font-family: var(--mono); font-size: 15px; line-height: 1.55;
+  padding: 12px 14px;
+}
+#codeBox { flex: 1; height: 34vh; min-height: 260px; }
+#outBox { flex: 1; min-height: 240px; background: #12151c; color: #9ef0c8; }
+
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; padding: 10px 14px; background: var(--panel); border-top: 1px solid var(--border); flex-shrink: 0; }
+.meta label { font-size: 13.5px; color: var(--text-dim); display: block; margin-bottom: 3px; }
+.meta input, .meta textarea, #blankTable input {
+  width: 100%; padding: 6px 8px; background: var(--panel-2);
+  border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-family: var(--sans); font-size: 14.5px; outline: none;
+}
+.meta textarea { padding: 7px 9px; height: 58px; font-size: 14.5px; line-height: 1.5; resize: none; }
+.meta input:focus, .meta textarea:focus, #blankTable input:focus { border-color: var(--accent); }
+.meta .full { grid-column: 1 / -1; }
+.meta .mono { font-family: var(--mono); }
+.combo { position: relative; }
+.combo input { padding-right: 30px; }
+.combo .caret {
+  position: absolute; right: 1px; top: 1px; bottom: 1px; width: 26px;
+  background: var(--panel); border: none; border-left: 1px solid var(--border);
+  border-radius: 0 6px 6px 0; color: var(--text-dim); cursor: pointer; font-size: 12px; padding: 0;
+}
+.combo .caret:hover, .combo .caret.open { color: var(--accent); }
+.gpop {
+  display: none; position: absolute; z-index: 15; left: 0; top: 100%; margin-top: 4px;
+  min-width: 100%; max-height: 216px; overflow: auto;
+  background: var(--panel-2); border: 1px solid #35507c; border-radius: 8px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.5); padding: 4px;
+}
+.gpop.show { display: block; }
+.gpop .gitem { padding: 6px 10px; border-radius: 6px; font-size: 14.5px; color: #c3cada; cursor: pointer; white-space: nowrap; }
+.gpop .gitem:hover { background: rgba(76,141,255,.22); color: #fff; }
+.gpop .gitem.on { color: var(--accent); background: rgba(47,158,125,.12); }
+.gpop .gnone { padding: 8px 10px; font-size: 13.5px; color: #5d6a85; white-space: nowrap; }
+
+.blank-wrap { max-height: 230px; overflow: auto; background: var(--panel); flex-shrink: 0; }
+#blankTable { width: 100%; border-collapse: collapse; font-size: 14px; }
+#blankTable th {
+  text-align: left; font-weight: 600; color: var(--text-dim); font-size: 13px;
+  padding: 6px 8px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--panel);
+}
+#blankTable td { padding: 4px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+#blankTable .no { font-family: var(--mono); color: var(--yellow); width: 46px; white-space: nowrap; }
+#blankTable input { font-family: var(--mono); font-size: 14px; }
+#blankTable .empty { color: #5d6a85; padding: 14px 8px; font-size: 14px; }
+
+.warns { flex-shrink: 0; max-height: 160px; overflow: auto; padding: 4px 14px; background: var(--panel); font-size: 14px; line-height: 1.7; }
+.warns:empty { display: none; }
+.warns .w { color: var(--red); }      
+.warns .g { color: var(--accent); }   
+.warns .i { color: var(--text-dim); } 
+
+.acts { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-top: 1px solid var(--border); background: var(--panel); flex-shrink: 0; }
+.acts .hint { margin-left: auto; font-size: 13px; color: #5d6a85; text-align: right; }
+.acts .hint code { font-family: var(--mono); color: var(--text-dim); }
+
+.toast {
+  position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%);
+  max-width: 90%; padding: 10px 18px; border-radius: 8px;
+  background: var(--panel-2); border: 1px solid var(--border);
+  color: var(--text); font-size: 15px; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease; z-index: 20;
+}
+.toast.show { opacity: 1; }
+.toast.error { border-color: var(--red); color: var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="logo">新建题目<span>把 .vue 案例代码改造成 quiz.json 的一道测试题</span></div>
+    <div class="spacer"></div>
+    <a class="btn ghost" href="index.html">&#8592; 返回模拟器</a>
+    <a class="btn ghost" href="test.html">知识点测试</a>
+  </div>
+  <div class="main">
+    <div class="left-pane">
+      <div class="pane-head"><b>①</b> 代码编辑框（在这里输入）：粘贴完整可运行的 .vue 代码，再把要让学生补的地方改成 <span class="k">%%1%%</span> <span class="k">%%2%%</span> …（编号从 1 开始、连续、不重复）<span class="live" id="liveStat"></span></div>
+      <textarea id="codeBox" spellcheck="false" placeholder="&lt;template&gt;&#10;  &lt;div class=&quot;page&quot;&gt;&#10;    &lt;h2&gt;插值与表达式&lt;/h2&gt;&#10;    &lt;p&gt;%%1%%&lt;/p&gt;&#10;  &lt;/div&gt;&#10;&lt;/template&gt;&#10;&lt;script&gt;&#10;export default {&#10;  data() { return { count: 21 } }&#10;}&#10;&lt;/script&gt;&#10;&lt;style&gt;&#10;.page { padding: 20px; }&#10;&lt;/style&gt;"></textarea>
+
+      <div class="meta">
+        <div><label>题目 id（英文，唯一）</label><input id="fId" class="mono" placeholder="q27-my-case"></div>
+        <div><label>分组（与左侧列表标题一致）</label>
+          <div class="combo">
+            <input id="fGroup" placeholder="二、指令" autocomplete="off">
+            <button type="button" class="caret" id="btnGroupList" title="从现有分组里选">&#9662;</button>
+            <div class="gpop" id="groupPop"></div>
+          </div>
+        </div>
+        <div><label>题目标题</label><input id="fName" placeholder="插值与表达式"></div>
+        <div><label>一句话说明</label><input id="fDesc" placeholder="{{ }} 文本插值与 JS 表达式"></div>
+        <div class="full"><label>题目要求（显示在题面顶部）</label><textarea id="fRequire" placeholder="把下面这处插值表达式补全：显示 count 的 2 倍。"></textarea></div>
+        <div><label>本题满分（按空均分）</label><input id="fScore" class="mono" value="10"></div>
+        <div><label>其他可接受写法默认分隔符</label><input id="fSep" class="mono" value="|" disabled></div>
+      </div>
+
+      <div class="pane-sub"><span class="grow"><b>②</b> 每个空的参考答案与提示（「参考答案」就是被挖掉的原文，其他可接受写法用 | 分隔）</span><button class="btn ghost sm" id="btnAdd" title="在代码框光标处插入下一个空位标记，并新增一行答案">&#65291; 增加空位</button></div>
+      <div class="blank-wrap">
+        <table id="blankTable">
+          <thead><tr><th>空号</th><th style="width:38%">参考答案（原样填回代码的文本）</th><th style="width:26%">✎ 提示</th><th style="width:26%">其他可接受写法（| 分隔）</th></tr></thead>
+          <tbody id="blankBody"><tr><td colspan="4" class="empty">粘贴代码并写好 %%1%% 等标记后，点下方「生成题目代码」</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="warns" id="warns"></div>
+      <div class="acts">
+        <button class="btn" id="btnGen">生成题目代码</button>
+        <span class="hint">生成即校验：答案回填后的代码会交给内置引擎试编译，编译不过会在这里说明</span>
+      </div>
+    </div>
+
+    <div class="right-pane">
+      <div class="pane-head"><b>③</b> 题目代码 <span class="ro">只读</span>与导出内容完全一致，这里不能输入</div>
+      <textarea id="outBox" readonly spellcheck="false" placeholder="点左侧「生成题目代码」后，这里会出现一个可直接并入 js/quiz.json 的题目对象"></textarea>
+      <div class="acts">
+        <button class="btn ghost" id="btnExport" disabled>导出题目</button>
+        <span class="hint" id="outMeta">把导出的对象粘到 quiz.json 数组末尾即可</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="js/sfc-parser.js"><script src="js/sfc-parser.js"></script></script>
+<script src="js/template-compiler.js"><script src="js/template-compiler.js"></script></script>
+<script src="js/quiz.json"><script src="js/quiz.json"></script></script>
+<script>
+(function () {
+  'use strict';
+
+  var TOKEN = /%%(\d+)%%/g;
+
+  var EXIST = (window.SfcSim && window.SfcSim.QUIZ_DATA) || [];
+  var usedIds = {};
+  var groupNames = [];
+  EXIST.forEach(function (q) {
+    if (!q) return;
+    if (q.id) usedIds[q.id] = 1;
+    if (q.group && groupNames.indexOf(q.group) < 0) groupNames.push(q.group);
+  });
+
+  var codeBox = document.getElementById('codeBox');
+  var outBox = document.getElementById('outBox');
+  var warns = document.getElementById('warns');
+  var blankBody = document.getElementById('blankBody');
+  var btnGen = document.getElementById('btnGen');
+  var btnExport = document.getElementById('btnExport');
+  var btnAdd = document.getElementById('btnAdd');
+  var liveStat = document.getElementById('liveStat');
+  var outMeta = document.getElementById('outMeta');
+  var toast = document.getElementById('toast');
+  var F = {
+    id: document.getElementById('fId'),
+    group: document.getElementById('fGroup'),
+    name: document.getElementById('fName'),
+    desc: document.getElementById('fDesc'),
+    require: document.getElementById('fRequire'),
+    score: document.getElementById('fScore')
+  };
+  var groupPop = document.getElementById('groupPop');
+  var btnGroupList = document.getElementById('btnGroupList');
+
+  function renderGroupPop() {
+    groupPop.innerHTML = '';
+    if (!groupNames.length) {
+      var e = document.createElement('div');
+      e.className = 'gnone';
+      e.textContent = '现有题库还没有分组，可直接输入新组名';
+      groupPop.appendChild(e);
+      return;
+    }
+    var cur = F.group.value.trim();
+    groupNames.forEach(function (g) {
+      var d = document.createElement('div');
+      d.className = 'gitem' + (g === cur ? ' on' : '');
+      d.textContent = g;
+      d.addEventListener('mousedown', function (ev) {
+        ev.preventDefault();
+        F.group.value = g;
+        closeGroupPop();
+        if (rows.length || currentItem) refresh();
+        showToast('已选分组：' + g);
+      });
+      groupPop.appendChild(d);
+    });
+  }
+  function openGroupPop() { renderGroupPop(); groupPop.classList.add('show'); btnGroupList.classList.add('open'); }
+  function closeGroupPop() { groupPop.classList.remove('show'); btnGroupList.classList.remove('open'); }
+  function groupPopOpen() { return groupPop.classList.contains('show'); }
+
+  btnGroupList.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (groupPopOpen()) closeGroupPop(); else openGroupPop();
+  });
+  F.group.addEventListener('click', function () { if (!groupPopOpen()) openGroupPop(); });
+  document.addEventListener('mousedown', function (e) {
+    if (groupPopOpen() && !groupPop.contains(e.target) && e.target !== F.group && e.target !== btnGroupList) closeGroupPop();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && groupPopOpen()) { closeGroupPop(); F.group.focus(); }
+  });
+
+  var rows = [];            
+  var currentItem = null;   
+
+  function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ''); }
+
+  function fixFullWidth(code) {
+    var hit = /％\s*(\d+)\s*％/.test(code);
+    if (!hit) return { code: code, fixed: 0 };
+    var out = code.replace(/％\s*(\d+)\s*％/g, function (m, d) { return '%%' + d + '%%'; });
+    return { code: out, fixed: (out === code) ? 0 : 1 };
+  }
+
+  function updateLive() {
+    if (!liveStat) return;
+    var code = codeBox.value;
+    var nums = tokensOf(code).order;
+    var txt = '已输入 ' + code.length + ' 字 · 检测到 ' + nums.length + ' 个空位' +
+      (nums.length ? '（' + nums.map(function (n) { return '%%' + n + '%%'; }).join(' ') + '）' : '');
+    if (/％/.test(code)) txt += ' · 注意：代码里有全角百分号 ％';
+    liveStat.textContent = txt;
+    liveStat.className = 'live' + (code.length && !nums.length ? ' warn' : '');
+  }
+
+  function noMarkerMsgs() {
+    var code = codeBox.value;
+    var out = [];
+    if (!code.length) {
+      out.push('左侧①代码框当前是空的（0 个字符）。如果你敲的字没出现在这里，多半是页面在应用内预览中打开、键盘输入没进表单：'
+        + '请改用浏览器（Edge / Chrome）打开 new-quiz.html，并按 Ctrl+F5 强制刷新');
+    } else {
+      out.push('代码框里已有 ' + code.length + ' 个字符，但没找到 %%1%% 这样的空位标记（两个半角百分号 + 数字 + 两个半角百分号）');
+    }
+    if (/％/.test(code)) out.push('检测到全角百分号 ％：中文输入法下要切到英文再打 %（或点一下「生成题目代码」自动转换）');
+    if (/%%\s*\d+\s*%%/.test(code) === false && /%{1,3}\d/.test(code)) {
+      out.push('看到形如 %1% / %%1 的写法也不行，必须是成对的 %%数字%%');
+    }
+    return out;
+  }
+
+  function showToast(text, isErr) {
+    toast.textContent = text;
+    toast.className = 'toast show' + (isErr ? ' error' : '');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.className = 'toast'; }, isErr ? 3000 : 1600);
+  }
+
+  function tokensOf(code) {
+    var order = [];
+    var seen = {};
+    var dup = [];
+    var pos = {};
+    var m;
+    TOKEN.lastIndex = 0;
+    while ((m = TOKEN.exec(code))) {
+      var n = +m[1];
+      if (seen[n]) { if (dup.indexOf(n) < 0) dup.push(n); continue; }
+      seen[n] = 1;
+      order.push(n);
+      pos[n] = m.index;
+    }
+    var max = 0;
+    var missing = [];
+    order.forEach(function (n) { if (n > max) max = n; });
+    for (var i = 1; i <= max; i++) if (!seen[i]) missing.push(i);
+    return { order: order, dup: dup, missing: missing, pos: pos };
+  }
+
+  function regionAt(code, idx) {
+    var s = code.indexOf('\x3cscript>');
+    var se = code.indexOf('\x3c/script>');
+    var st = code.indexOf('\x3cstyle>');
+    if (s >= 0 && idx > s && idx < se) return 'js';
+    if (st >= 0 && idx > st) return 'css';
+    return 'html';
+  }
+
+  function tipComment(region, n, tip) {
+    var text = ' ✎ 空' + n + '：' + (tip || '补全这里') + ' ';
+    return region === 'js' ? '//' + text
+      : region === 'css' ? '/*' + text + ' */'
+        : '\x3c!--' + text + ' --\x3e';
+  }
+
+  function insertTips(code, list) {
+    var out = code;
+    list.forEach(function (r) {
+      if (!r.tip) return;
+      if (out.indexOf('✎ 空' + r.i + '：') >= 0) return;
+      var token = '%%' + r.i + '%%';
+      var idx = out.indexOf(token);
+      if (idx < 0) return;
+      var lineStart = out.lastIndexOf('\n', idx) + 1;
+      var indent = (out.slice(lineStart).match(/^[ \t]*/) || [''])[0];
+      out = out.slice(0, lineStart) + indent + tipComment(regionAt(out, idx), r.i, r.tip) + '\n' + out.slice(lineStart);
+    });
+    return out;
+  }
+
+  function stripTips(code) {
+    return code.split('\n').filter(function (l) { return l.indexOf('✎') < 0; }).join('\n');
+  }
+
+  function reassemble(codeWithTips, blanks) {
+    var map = {};
+    blanks.forEach(function (b) { map[b.i] = b.answers[0]; });
+    return stripTips(codeWithTips).replace(/%%(\d+)%%/g, function (m, n) {
+      return map[n] != null ? map[n] : '';
+    });
+  }
+
+  function compileCheck(src) {
+    var V = window.SfcSim;
+    try {
+      var sfc = V.splitBlocks(src);
+      var t = null;
+      var s = null;
+      sfc.blocks.forEach(function (b) {
+        if (b.type === 'template' && !t) t = b;
+        else if (b.type === 'script' && !s) s = b;
+      });
+      if (!t) return '缺少 <template> 块';
+      if (!s) return '缺少 <script> 块（需要 export default {...}）';
+      V.buildAst(t.content);
+      new Function('__exports__', V.cleanScript(s.content) + ';\nreturn __exports__.default;')({});
+      return '';
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  function suspiciousTokens(code, order, answerMap) {
+    var bad = [];
+    order.forEach(function (n) {
+      var token = '%%' + n + '%%';
+      var idx = code.indexOf(token);
+      if (idx < 0) return;
+      var lineStart = code.lastIndexOf('\n', idx) + 1;
+      var lineEnd = code.indexOf('\n', lineStart);
+      var line = code.slice(lineStart, lineEnd < 0 ? code.length : lineEnd);
+      if (regionAt(code, idx) !== 'html') return;
+      if (line.trim() === token) return;               
+      var ans = (answerMap && answerMap[n]) || '';
+      if (/^\{\{/.test(ans.trim())) return;             
+      var before = line.slice(0, line.indexOf(token));
+      var insideTag = (before.match(/</g) || []).length > (before.match(/>/g) || []).length;
+      var inMustache = (before.match(/\{\{/g) || []).length > (before.match(/\}\}/g) || []).length;
+      if (!(insideTag || inMustache)) bad.push(n);
+    });
+    return bad;
+  }
+
+  function splitExtra(s) {
+    return String(s || '').split('|').map(function (x) { return x.trim(); }).filter(function (x) { return x.length; });
+  }
+
+  function syncRows() {
+    var trs = blankBody.querySelectorAll('tr[data-i]');
+    var next = [];
+    for (var i = 0; i < trs.length; i++) {
+      var ins = trs[i].querySelectorAll('input');
+      next.push({ i: +trs[i].getAttribute('data-i'), answer: ins[0].value, tip: ins[1].value, extra: ins[2].value });
+    }
+    rows = next;
+  }
+  function rowFor(n) {
+    for (var i = 0; i < rows.length; i++) if (rows[i].i === n) return rows[i];
+    return null;
+  }
+  function ensureRows(order) {
+    var kept = [];
+    order.forEach(function (n) {
+      var old = rowFor(n);
+      kept.push(old || { i: n, answer: '', tip: '', extra: '' });
+    });
+    rows = kept;
+  }
+  function renderRows() {
+    if (!rows.length) {
+      blankBody.innerHTML = '<tr><td colspan="4" class="empty">粘贴代码并写好 %%1%% 等标记后，点下方「生成题目代码」</td></tr>';
+      return;
+    }
+    var html = '';
+    rows.forEach(function (r) {
+      html += '<tr data-i="' + r.i + '">' +
+        '<td class="no">空 ' + r.i + '</td>' +
+        '<td><input class="c-ans" spellcheck="false" placeholder="被挖掉的原文" value="' + escAttr(r.answer) + '"></td>' +
+        '<td><input class="c-tip" spellcheck="false" placeholder="给学生看的提示" value="' + escAttr(r.tip) + '"></td>' +
+        '<td><input class="c-extra" spellcheck="false" placeholder="写法2|写法3" value="' + escAttr(r.extra) + '"></td>' +
+        '</tr>';
+    });
+    blankBody.innerHTML = html;
+  }
+  function escAttr(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  function build() {
+    var errs = [];
+    var infos = [];
+    var code = codeBox.value;
+    var tk = tokensOf(code);
+
+    if (!tk.order.length) noMarkerMsgs().forEach(function (x) { errs.push(x); });
+    if (tk.dup.length) errs.push('空号重复出现：' + tk.dup.join('、') + '（每个编号只能有一处）');
+    if (tk.missing.length) errs.push('空号不连续，缺少：' + tk.missing.join('、'));
+    if (code.indexOf('\x3ctemplate') < 0) errs.push('代码缺少 <template> 块');
+    if (code.indexOf('\x3cscript') < 0) errs.push('代码缺少 <script> 块');
+
+    var id = F.id.value.trim();
+    if (!id) errs.push('题目 id 不能为空');
+    else if (!/^[A-Za-z0-9_.\-]+$/.test(id)) errs.push('题目 id 只能用英文字母、数字和 - _ .');
+    else if (usedIds[id]) infos.push('id「' + id + '」已存在于现有题库；若是在改原题可忽略，否则装载时会保留前者');
+
+    var name = F.name.value.trim();
+    if (!name) errs.push('题目标题不能为空');
+    var group = F.group.value.trim() || '未分组';
+    var score = parseFloat(F.score.value);
+    if (!(score > 0)) { score = 10; infos.push('满分不是有效数字，已按 10 分处理'); }
+
+    var blanks = [];
+    tk.order.forEach(function (n) {
+      var r = rowFor(n);
+      if (!r) return;
+      var ans = r.answer;
+      if (!ans) { errs.push('空 ' + n + ' 没填参考答案'); return; }
+      var alts = splitExtra(r.extra).filter(function (x) { return norm(x) !== norm(ans); });
+      blanks.push({ i: n, answers: [ans].concat(alts), tip: r.tip || '' });
+    });
+
+    if (errs.length) return { errs: errs, infos: infos };
+
+    var codeWithTips = insertTips(code, rows);
+    var ansMap = {};
+    blanks.forEach(function (b) { ansMap[b.i] = b.answers[0]; });
+    var bad = suspiciousTokens(codeWithTips, tk.order, ansMap);
+    if (bad.length) infos.push('空 ' + bad.join('、') + ' 不在标签内也不在 {{ }} 里，确认一下是不是挖到了说明文字上');
+
+    var assembled = reassemble(codeWithTips, blanks);
+    var err = compileCheck(assembled);
+    if (err) {
+      return {
+        errs: ['答案回填后的代码编译不过：' + err +
+          '。请核对参考答案是否与挖掉的原文逐字一致（引号、空格、转义都要一样）'],
+        infos: infos
+      };
+    }
+
+    return {
+      errs: [],
+      infos: infos,
+      item: {
+        id: id,
+        group: group,
+        name: name,
+        desc: F.desc.value.trim(),
+        score: score,
+        require: F.require.value.trim(),
+        code: codeWithTips,
+        blanks: blanks
+      }
+    };
+  }
+
+  function showWarns(errs, infos) {
+    warns.innerHTML = '';
+    function line(cls, mark, text) {
+      var div = document.createElement('div');
+      div.className = cls;
+      div.textContent = mark + ' ' + text;
+      warns.appendChild(div);
+    }
+    errs.forEach(function (e) { line('w', '✗', e); });
+    infos.forEach(function (i) { line('i', '·', i); });
+    if (!errs.length && !infos.length) {
+      line('g', '✓', '校验通过：题面 ' + rows.length + ' 个空，答案回填后能被内置引擎编译');
+    }
+  }
+
+  function refresh() {
+    syncRows();
+    var r = build();
+    showWarns(r.errs, r.infos);
+    if (r.errs.length) {
+      currentItem = null;
+      btnExport.disabled = true;
+      outMeta.textContent = '还有 ' + r.errs.length + ' 个问题要解决，暂时不能导出';
+      return;
+    }
+    currentItem = r.item;
+    outBox.value = JSON.stringify(r.item, null, 2);
+    btnExport.disabled = false;
+    outMeta.textContent = r.item.blanks.length + ' 个空 · 满分 ' + r.item.score +
+      ' · 校验通过 · 文件名 quiz-item-' + r.item.id + '.json';
+  }
+
+  function generate() {
+    var infos = [];
+    var fw = fixFullWidth(codeBox.value);
+    if (fw.fixed) {
+      codeBox.value = fw.code;
+      infos.push('已把全角百分号 ％ 自动换成半角 %，题面标记现在是 %%n%%');
+    }
+    var tk = tokensOf(codeBox.value);
+    updateLive();
+    ensureRows(tk.order);
+    renderRows();
+    if (!tk.order.length) {
+      rows = [];
+      currentItem = null;
+      btnExport.disabled = true;
+      showWarns(noMarkerMsgs(), infos);
+      return;
+    }
+    if (!F.id.value.trim()) F.id.value = suggestId();   
+    if (!F.group.value.trim() && groupNames.length) F.group.value = groupNames[groupNames.length - 1];
+    refresh();
+    if (currentItem && infos.length) {
+      var w = build();
+      showWarns(w.errs, infos.concat(w.infos));
+    }
+    if (currentItem) showToast('已生成题目，可导出或继续改空位答案');
+  }
+
+  function suggestId() {
+    var max = 0;
+    Object.keys(usedIds).forEach(function (id) {
+      var m = /^q(\d+)/.exec(id);
+      if (m && +m[1] > max) max = +m[1];
+    });
+    return 'q' + (max + 1) + '-new';
+  }
+
+  function addBlank() {
+    var code = codeBox.value;
+    var used = tokensOf(code).order;
+    var next = 1;
+    while (used.indexOf(next) >= 0 || rowFor(next)) next++;
+    var token = '%%' + next + '%%';
+    var pos = code.length;
+    if (typeof codeBox.selectionStart === 'number') {
+      var at0 = codeBox.selectionStart === 0 && codeBox.selectionEnd === 0;
+      pos = (at0 && code.length) ? code.length : codeBox.selectionStart;
+    }
+    codeBox.value = code.slice(0, pos) + token + code.slice(pos);
+    try { codeBox.setSelectionRange(pos + token.length, pos + token.length); } catch (e) { }
+    syncRows();
+    ensureRows(tokensOf(codeBox.value).order);
+    renderRows();
+    refresh();
+    var tr = blankBody.querySelector('tr[data-i="' + next + '"]');
+    if (tr) tr.querySelectorAll('input')[0].focus();
+    showToast('已插入 ' + token + '，请把「参考答案」填成被替换掉的那段原文');
+  }
+
+  function exportJson() {
+    if (!currentItem) { showToast('先生成并通过校验再导出', true); return; }
+    var text = JSON.stringify(currentItem, null, 2) + '\n';
+    var fname = 'quiz-item-' + currentItem.id + '.json';
+    try {
+      var blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 0);
+      showToast('已导出 ' + fname);
+    } catch (e) {
+      showToast('下载被浏览器拦住了，已在新窗口打开，可另存为 ' + fname, true);
+      try {
+        var win = window.open('data:application/json;charset=utf-8,' + encodeURIComponent(text));
+        if (!win) console.log(text);
+      } catch (e2) { console.log(text); }
+    }
+  }
+
+  btnGen.addEventListener('click', generate);
+  if (btnAdd) btnAdd.addEventListener('click', addBlank);
+  btnExport.addEventListener('click', exportJson);
+  blankBody.addEventListener('input', function () { refresh(); });
+  [F.id, F.group, F.name, F.desc, F.require, F.score].forEach(function (el) {
+    el.addEventListener('input', function () { if (currentItem || rows.length) refresh(); });
+  });
+  codeBox.addEventListener('input', function () { updateLive(); });
+  outBox.addEventListener('click', function () {
+    showToast('这里是只读的题目代码，请在左侧①代码编辑框里输入', true);
+  });
+  codeBox.addEventListener('blur', function () {
+    if (rows.length) {
+      var tk = tokensOf(codeBox.value);
+      var same = tk.order.length === rows.length && tk.order.every(function (n, i) { return rows[i] && rows[i].i === n; });
+      if (!same) showToast('代码里的空位有变化，请重新点「生成题目代码」');
+    }
+    updateLive();
+  });
+
+  updateLive();
+})();
+</script>
+</body>
+</html>

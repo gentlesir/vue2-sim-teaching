@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前端组件语法教学与智能测试系统</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c212b;
+  --border: #262c38;
+  --text: #e6e9ef;
+  --text-dim: #8b93a7;
+  --accent: #2f9e7d;
+  --red: #ff5c6c;
+  --yellow: #ffcc66;
+  --mono: Consolas, "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden;
+}
+.app { display: flex; flex-direction: column; height: 100%; }
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+.topbar .logo { font-weight: 700; font-size: 14px; color: var(--accent); letter-spacing: .5px; }
+.topbar .logo span { color: var(--text-dim); font-weight: 400; font-size: 12px; margin-left: 6px; }
+.topbar .spacer { flex: 1; }
+.user-info {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 14px;
+  margin-left: 6px; padding-left: 14px;
+  border-left: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim); min-width: 0;
+}
+.user-info i { font-style: normal; }
+.user-info .v { font-family: var(--mono); color: #c3cada; margin-left: 4px; }
+.user-info .at { color: var(--accent); }
+.total {
+  font-size: 12px; color: var(--text-dim);
+  font-family: var(--mono);
+  padding: 5px 10px; border: 1px solid var(--border);
+  border-radius: 7px; background: var(--panel-2);
+}
+.total b { color: var(--accent); }
+
+button.btn, a.btn {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  padding: 7px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: filter .15s ease;
+}
+button.btn:hover, a.btn:hover { filter: brightness(1.12); }
+button.btn.ghost, a.btn.ghost {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+button.btn.logout { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+button.btn.logout:hover { filter: none; color: var(--red); border-color: var(--red); background: rgba(255,92,108,.08); }
+button.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+
+.main { display: flex; flex: 1; min-height: 0; }
+
+.kb-pane {
+  width: 250px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--panel);
+  min-height: 0;
+}
+.kb-head {
+  padding: 9px 14px; font-size: 12px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  letter-spacing: .3px;
+}
+.kb-body { flex: 1; overflow: auto; padding: 6px 0 14px; }
+.kb-group-title {
+  padding: 8px 14px; font-size: 12.5px; font-weight: 600;
+  color: #c3cada; cursor: pointer; user-select: none;
+}
+.kb-group-title:hover { background: var(--panel-2); }
+.kb-group-title .arrow { font-size: 9px; color: var(--text-dim); display: inline-block; width: 12px; }
+.kb-group-title .gcnt {
+  float: right; font-weight: 400; font-size: 10.5px; color: #5d6a85;
+  font-family: var(--mono);
+}
+.kb-group.collapsed .arrow { transform: rotate(-90deg); }
+.kb-group.collapsed .kb-items { display: none; }
+.kb-item {
+  padding: 6px 12px 6px 30px; font-size: 12px; color: #9aa3b8;
+  cursor: pointer; line-height: 1.5;
+  border-left: 2px solid transparent;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.kb-item:hover { color: var(--text); background: var(--panel-2); }
+.kb-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(47,158,125,.08); }
+.kb-item .nm { flex: 1; min-width: 0; }
+.kb-item .d { font-size: 11px; color: #5d6a85; display: block; }
+.kb-item .sc {
+  flex-shrink: 0; font-family: var(--mono); font-size: 10.5px;
+  padding: 1px 6px; border-radius: 10px;
+  background: var(--panel-2); color: #5d6a85;
+  border: 1px solid var(--border);
+}
+.kb-item .sc.full { background: rgba(47,158,125,.14); color: var(--accent); border-color: rgba(47,158,125,.35); }
+.kb-item .sc.part { background: rgba(255,204,102,.12); color: var(--yellow); border-color: rgba(255,204,102,.3); }
+.kb-item .sc.zero { background: rgba(255,92,108,.12); color: var(--red); border-color: rgba(255,92,108,.3); }
+
+.paper-pane {
+  flex: 1; display: flex; flex-direction: column;
+  min-width: 0; border-right: 1px solid var(--border);
+}
+.paper-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim);
+  flex-shrink: 0;
+}
+.paper-head .pname { font-weight: 600; color: var(--accent); font-size: 13px; }
+.paper-head .pscore { margin-left: auto; font-family: var(--mono); }
+.req {
+  padding: 9px 16px; flex-shrink: 0;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px; color: #c3cada; line-height: 1.6;
+}
+.req .tag {
+  display: inline-block; margin-right: 8px; padding: 1px 7px;
+  font-size: 10.5px; border-radius: 4px;
+  background: rgba(47,158,125,.14); color: var(--accent);
+}
+.paper-body { flex: 1; min-height: 0; overflow: auto; background: #12151c; padding: 12px 16px; }
+.paper {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px; line-height: 1.85;
+  color: #c9d1e3;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.paper .cmt { color: var(--yellow); font-style: italic; }   
+.paper .blk { color: #79c0ff; }                            
+.paper .ln { color: #3c4457; user-select: none; display: inline-block; width: 26px; }   
+.blank {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #fff;
+  background: #223049;
+  border: 1px solid #35507c;
+  border-bottom: 2px solid #4c8dff;
+  border-radius: 5px;
+  padding: 2px 6px;
+  margin: 0 2px;
+  outline: none;
+  min-width: 60px;
+  vertical-align: middle;
+  transition: background .15s ease, border-color .15s ease;
+}
+.blank:focus { background: #26385c; border-color: var(--accent); }
+.blank.good { background: rgba(47,158,125,.16); border-color: var(--accent); border-bottom-color: var(--accent); color: #9ef0c8; }
+.blank.bad { background: rgba(255,92,108,.14); border-color: var(--red); border-bottom-color: var(--red); color: #ffb3ba; }
+.blank.ref { background: rgba(255,204,102,.12); border-color: var(--yellow); border-bottom-color: var(--yellow); color: #ffe3a3; }
+.bno { font-size: 10px; color: var(--text-dim); vertical-align: super; margin-left: 1px; }
+.paper-actions {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+}
+.paper-actions .hint { margin-left: auto; font-size: 11px; color: #5d6a85; }
+.grade {
+  flex-shrink: 0; max-height: 128px; overflow: auto;
+  padding: 0 16px;
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  font-size: 12px; line-height: 1.7; color: #c3cada;
+}
+.grade:empty { display: none; padding: 0; border: none; }   
+.grade .row { display: flex; gap: 8px; align-items: baseline; }
+.grade .ok { color: var(--accent); }
+.grade .no { color: var(--red); }
+.grade .sum { margin: 4px 0 6px; font-weight: 600; }
+
+.preview-pane { width: 360px; flex-shrink: 0; display: flex; flex-direction: column; background: var(--panel); }
+.preview-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim);
+  flex-shrink: 0;
+}
+.phone {
+  flex: 1; margin: 14px auto; width: 320px;
+  max-width: calc(100% - 28px);
+  background: #ffffff; border-radius: 26px;
+  border: 8px solid #1c212b; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0,0,0,.45);
+}
+.phone-status {
+  height: 24px; background: #f2f3f5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #999; flex-shrink: 0; font-family: var(--mono);
+}
+.phone-screen { flex: 1; overflow: auto; background: #fff; color: #333; position: relative; }
+.console-pane {
+  border-top: 1px solid var(--border);
+  background: var(--panel); height: 132px;
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+.console-head {
+  padding: 6px 14px; font-size: 11.5px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.console-head .cnt { margin-left: auto; }
+.console-body { flex: 1; overflow: auto; padding: 6px 0; font-family: var(--mono); font-size: 12px; }
+.log-line { padding: 3px 14px; display: flex; gap: 8px; align-items: baseline; }
+.log-line .tag { flex-shrink: 0; font-size: 10px; padding: 0 6px; border-radius: 4px; }
+.log-line.info .tag { background: rgba(47,158,125,.15); color: #2f9e7d; }
+.log-line.error .tag { background: rgba(255,92,108,.15); color: #ff5c6c; }
+.log-line.warn .tag { background: rgba(255,204,102,.15); color: #ffcc66; }
+.log-line .msg { color: #c9d1e3; word-break: break-all; white-space: pre-wrap; }
+</style>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'sfc_user';
+
+  function toLogin() {
+    window.SFC_BLOCKED = true;   
+    window.location.replace('login.html');
+  }
+
+  var raw;
+  try {
+    raw = window.localStorage.getItem(KEY);
+  } catch (e) {
+    toLogin();
+    return;
+  }
+  if (!raw) { toLogin(); return; }
+
+  var user;
+  try {
+    user = JSON.parse(raw);
+  } catch (e) {
+    toLogin();
+    return;
+  }
+  if (!user || !user.account || !user.name || !user.phone) { toLogin(); return; }
+
+  window.SFC_USER_KEY = user;
+})();
+</script>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="logo">知识点测试<span>补全代码 · 自动判分 · 实时运行</span></div>
+    <div class="user-info" id="userInfo"></div>
+    <div class="spacer"></div>
+    <div class="total" id="totalScore">总分 —</div>
+    <button class="btn ghost" id="btnExport" title="把当前账号 26 题的得分导出成 CSV（含 BOM，Excel / WPS 打开不乱码）">&#128190; 导出成绩</button>
+    <a class="btn ghost" href="index.html">&#8592; 返回模拟器</a>
+    <button class="btn logout" id="btnLogout">退出登录</button>
+  </div>
+  <div class="main">
+    <div class="kb-pane">
+      <div class="kb-head">&#128221; 知识点测试（共 <span id="quizCount">0</span> 题）</div>
+      <div class="kb-body" id="quizList"></div>
+    </div>
+    <div class="paper-pane">
+      <div class="paper-head">
+        <span class="pname" id="paperName">请选择左侧知识点</span>
+        <span class="pscore" id="paperScore"></span>
+      </div>
+      <div class="req" id="paperReq"></div>
+      <div class="paper-body"><pre class="paper" id="paper"></pre></div>
+      <div class="grade" id="gradeResult"></div>
+      <div class="paper-actions">
+        <button class="btn" id="btnGrade">判分并运行</button>
+        <button class="btn ghost" id="btnRun">只运行看效果</button>
+        <button class="btn ghost" id="btnReset">重做本题</button>
+        <button class="btn ghost" id="btnRef">显示参考答案</button>
+        <span class="hint">空位内按 Enter 跳下一个空，Ctrl+Enter 判分并运行</span>
+      </div>
+    </div>
+    <div class="preview-pane">
+      <div class="preview-head">&#128241; 运行结果预览</div>
+      <div class="phone">
+        <div class="phone-status">组件语法 Sim &middot; 320 &times; auto</div>
+        <div class="phone-screen" id="previewScreen"></div>
+      </div>
+    </div>
+  </div>
+  <div class="console-pane">
+    <div class="console-head">&#128424; 控制台 <span class="cnt" id="logCount">0 条</span></div>
+    <div class="console-body" id="consoleBody"></div>
+  </div>
+</div>
+<script src="js/sfc-parser.js"><script src="js/sfc-parser.js"></script></script>
+<script src="js/template-compiler.js"><script src="js/template-compiler.js"></script></script>
+<script src="js/reactivity.js"><script src="js/reactivity.js"></script></script>
+<script src="js/instance.js"><script src="js/instance.js"></script></script>
+<script src="js/renderer.js"><script src="js/renderer.js"></script></script>
+<script src="js/main.js"><script src="js/main.js"></script></script>
+<script src="js/quiz.json"><script src="js/quiz.json"></script></script>
+<script src="js/quiz.js"><script src="js/quiz.js"></script></script>
+<script src="js/test-app.js"><script src="js/test-app.js"></script></script>
+</body>
+</html>

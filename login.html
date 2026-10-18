@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前端组件语法教学与智能测试系统</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c212b;
+  --border: #262c38;
+  --text: #e6e9ef;
+  --text-dim: #8b93a7;
+  --accent: #2f9e7d;      
+  --red: #ff5c6c;         
+  --yellow: #ffcc66;
+  --mono: Consolas, "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  display: flex; align-items: center; justify-content: center;   
+  padding: 24px;
+}
+
+.card {
+  width: 100%; max-width: 380px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 26px 24px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.5);
+}
+.card.shake { animation: shake .35s ease; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.brand { text-align: center; margin-bottom: 4px; }
+.brand .mark {
+  display: inline-block; width: 44px; height: 44px; line-height: 44px;
+  border-radius: 12px; background: rgba(47,158,125,.14);
+  color: var(--accent); font-size: 22px; font-weight: 700;
+}
+.brand h1 { margin: 12px 0 4px; font-size: 19px; letter-spacing: .5px; }
+.brand p { margin: 0 0 22px; font-size: 12.5px; color: var(--text-dim); }
+
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-size: 12.5px; color: #c3cada; margin-bottom: 6px;
+}
+.field label .req { color: var(--red); margin-left: 3px; }   
+.field input {
+  width: 100%; padding: 10px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+.field input::placeholder { color: #5d6a85; }
+.field input:focus { border-color: var(--accent); }
+.field.err input { border-color: var(--red); background: rgba(255,92,108,.06); }
+.field.ok input { border-color: rgba(47,158,125,.55); }
+.msg {
+  min-height: 16px; margin-top: 5px;
+  font-size: 11.5px; line-height: 1.4; color: var(--red);
+}
+.msg.tip { color: var(--text-dim); }
+
+.btn {
+  width: 100%; margin-top: 6px; padding: 11px 16px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 8px;
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer;
+  transition: filter .15s ease;
+}
+.btn:hover { filter: brightness(1.12); }
+.btn:active { filter: brightness(.95); }
+
+.last {
+  margin-top: 18px; padding: 10px 12px;
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  font-size: 11.5px; color: var(--text-dim); line-height: 1.7;
+}
+.last b { color: #c3cada; font-weight: 600; font-family: var(--mono); }
+.foot { margin-top: 14px; text-align: center; font-size: 11px; color: #5d6a85; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%);
+  max-width: 90%; padding: 10px 18px; border-radius: 8px;
+  background: var(--panel-2); border: 1px solid var(--border);
+  color: var(--text); font-size: 13px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+.toast.show { opacity: 1; }
+.toast.error { border-color: var(--red); color: var(--red); }
+
+.mask {
+  position: fixed; inset: 0; z-index: 10;
+  background: rgba(8,10,14,.72);       
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; visibility: hidden;      
+  transition: opacity .18s ease, visibility .18s ease;
+}
+.mask.show { opacity: 1; visibility: visible; }
+.modal {
+  width: 100%; max-width: 344px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  transform: translateY(10px) scale(.98);   
+  transition: transform .18s ease;
+}
+.mask.show .modal { transform: none; }
+.modal h2 { margin: 0; font-size: 16px; letter-spacing: .5px; }
+.modal .sub { margin: 5px 0 16px; font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+.mrow {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 10px 12px; margin-bottom: 8px;
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+}
+.mrow .k { font-size: 12px; color: var(--text-dim); flex-shrink: 0; }
+.mrow .v {
+  font-family: var(--mono); font-size: 14px; color: var(--text);
+  text-align: right; word-break: break-all;
+}
+.modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+.modal-btns .btn { flex: 1; width: auto; margin-top: 0; font-size: 14px; letter-spacing: 0; }
+.btn.ghost { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="brand">
+    <h1>前端组件语法教学与智能测试系统</h1>
+    <p>请登录以进入实验环境</p>
+  </div>
+
+  <form id="loginForm" novalidate autocomplete="off">
+    <div class="field" data-for="account">
+      <label for="account">账号<span class="req">*</span></label>
+      <input type="text" id="account" name="account" placeholder="6—20 个字符" maxlength="20">
+      <div class="msg tip">长度 6—20 个字符，区分中英文均按 1 个字符计</div>
+    </div>
+
+    <div class="field" data-for="name">
+      <label for="name">姓名<span class="req">*</span></label>
+      <input type="text" id="name" name="name" placeholder="请输入真实姓名" maxlength="20">
+      <div class="msg tip">必填，用于记录实训成绩</div>
+    </div>
+
+    <div class="field" data-for="phone">
+      <label for="phone">手机号<span class="req">*</span></label>
+      <input type="tel" id="phone" name="phone" placeholder="11 位中国大陆手机号" maxlength="11">
+      <div class="msg tip">11 位数字，1 开头，第 2 位为 3—9</div>
+    </div>
+
+    <button type="submit" class="btn">登 录</button>
+  </form>
+
+  <div class="last" id="lastInfo" hidden></div>
+</div>
+
+<div class="mask" id="mask" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h2 id="modalTitle">请核对登录信息</h2>
+    <p class="sub">确认无误后将写入本机 localStorage，并进入实验环境</p>
+    <div id="modalRows"></div>
+    <div class="modal-btns">
+      <button type="button" class="btn ghost" id="btnBack">返回修改</button>
+      <button type="button" class="btn" id="btnConfirm">核对无误</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'sfc_user';   
+
+  var rules = {
+    account: function (v) {
+      if (!v) return '请输入账号';
+      if (/\s/.test(v)) return '账号不能包含空格';
+      if (v.length < 6 || v.length > 20) return '账号长度需为 6—20 个字符，当前 ' + v.length + ' 个';
+      return '';
+    },
+    name: function (v) {
+      if (!v) return '请输入姓名';
+      if (v.length > 20) return '姓名过长，请控制在 20 个字符以内';
+      return '';
+    },
+    phone: function (v) {
+      if (!v) return '请输入手机号';
+      if (!/^\d+$/.test(v)) return '手机号只能包含数字';
+      if (!/^1[3-9]\d{9}$/.test(v)) return '手机号格式不正确（11 位，1 开头，第 2 位为 3—9）';
+      return '';
+    }
+  };
+
+  var fields = ['account', 'name', 'phone'];
+
+  var form = document.getElementById('loginForm');
+  var card = document.getElementById('card');
+  var toast = document.getElementById('toast');
+  var mask = document.getElementById('mask');
+  var modalRows = document.getElementById('modalRows');
+  var btnBack = document.getElementById('btnBack');
+  var btnConfirm = document.getElementById('btnConfirm');
+  var draft = null;        
+  var inputs = {};
+  fields.forEach(function (k) { inputs[k] = document.getElementById(k); });
+
+  function valueOf(k) { return inputs[k].value.trim(); }
+
+  function check(k, showOk) {
+    var err = rules[k](valueOf(k));
+    var box = inputs[k].closest('.field');
+    var msg = box.querySelector('.msg');
+    box.classList.toggle('err', !!err);
+    box.classList.toggle('ok', !err && !!valueOf(k) && !!showOk);
+    msg.classList.toggle('tip', !(!!err || (valueOf(k) && showOk)));
+    msg.textContent = err || defaultTip(k);
+    return err;
+  }
+
+  function defaultTip(k) {
+    if (k === 'account') return '长度 6—20 个字符，区分中英文均按 1 个字符计';
+    if (k === 'name') return '必填，用于记录实训成绩';
+    return '11 位数字，1 开头，第 2 位为 3—9';
+  }
+
+  fields.forEach(function (k) {
+    inputs[k].addEventListener('blur', function () { check(k, true); });
+    inputs[k].addEventListener('input', function () {
+      var box = inputs[k].closest('.field');
+      if (box.classList.contains('err')) check(k, true);
+    });
+  });
+
+  inputs.phone.addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 11);
+  });
+
+  function showToast(text, isError) {
+    toast.textContent = text;
+    toast.className = 'toast show' + (isError ? ' error' : '');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.className = 'toast'; }, isError ? 2600 : 1400);
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();   
+
+    var errors = [];
+    fields.forEach(function (k) {
+      var err = check(k, true);
+      if (err) errors.push({ key: k, msg: err });
+    });
+
+    if (errors.length) {
+      card.classList.remove('shake');
+      void card.offsetWidth;            
+      card.classList.add('shake');
+      inputs[errors[0].key].focus();
+      showToast(errors[0].msg, true);
+      return;
+    }
+
+    draft = {
+      account: valueOf('account'),
+      name: valueOf('name'),
+      phone: valueOf('phone')
+    };
+    openModal();
+  });
+
+  function rowHtml(k, v) {
+    return '<div class="mrow"><span class="k">' + k + '</span>' +
+      '<span class="v">' + escapeHtml(v) + '</span></div>';
+  }
+
+  function openModal() {
+    modalRows.innerHTML =
+      rowHtml('账号', draft.account) +
+      rowHtml('姓名', draft.name) +
+      rowHtml('手机号', draft.phone);
+    mask.classList.add('show');
+    btnConfirm.focus();   
+  }
+
+  function closeModal() {
+    mask.classList.remove('show');
+    draft = null;
+  }
+
+  function backToForm() {
+    closeModal();
+    showToast('已返回，可继续修改');
+    inputs.account.focus();
+  }
+
+  btnBack.addEventListener('click', backToForm);
+
+  mask.addEventListener('click', function (e) {
+    if (e.target === mask) backToForm();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && mask.classList.contains('show')) backToForm();
+  });
+
+  btnConfirm.addEventListener('click', function () {
+    if (!draft) return;   
+
+    var now = new Date();
+    var user = {
+      account: draft.account,
+      name: draft.name,
+      phone: draft.phone,
+      loginTime: now.getTime(),        
+      loginTimeText: formatTime(now)   
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch (err) {
+      showToast('浏览器不允许写入 localStorage，请检查隐私设置后重试', true);
+      return;
+    }
+
+    mask.classList.remove('show');
+    showToast('核对无误，正在进入…');
+    setTimeout(function () {
+      window.location.href = 'index.html';
+    }, 500);
+  });
+
+  function formatTime(d) {
+    function p(n) { return n < 10 ? '0' + n : '' + n; }
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+      ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+  }
+
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      var last = JSON.parse(raw);
+      var el = document.getElementById('lastInfo');
+      el.hidden = false;
+      el.innerHTML = '上次登录：<b>' + escapeHtml(last.name || '') + '</b>（' +
+        escapeHtml(last.account || '') + '）于 ' + escapeHtml(last.loginTimeText || '') +
+        '，手机号 ' + escapeHtml(maskPhone(last.phone));
+      if (last.account) inputs.account.value = last.account;
+      if (last.name) inputs.name.value = last.name;
+      if (last.phone) inputs.phone.value = last.phone;
+    }
+  } catch (e) {  }
+
+  function maskPhone(p) {
+    p = String(p || '');
+    return p.length === 11 ? p.slice(0, 3) + '****' + p.slice(7) : (p || '—');
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  inputs.account.focus();   
+})();
+</script>
+</body>
+</html>

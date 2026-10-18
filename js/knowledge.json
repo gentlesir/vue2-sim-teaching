@@ -1,0 +1,174 @@
+(window.SfcSim = window.SfcSim || {}).KNOWLEDGE_DATA = [    
+  {
+    "title": "一、基础结构",
+    "icon": "🧱",
+    "items": [
+      {
+        "name": "SFC 单文件组件",
+        "desc": "template/script/style 三段结构",
+        "code": "<template>\n  <div class=\"page\">\n    <h2 class=\"title\">单文件组件</h2>\n    <p class=\"desc\">template 是结构，script 是逻辑，style 是样式</p>\n    <div class=\"card\">{{ msg }}</div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      msg: '同学们好！'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\n.title { margin: 0 0 8px; color: #2f9e7d; }\n.desc { color: #888; font-size: 13px; }\n.card {\n  margin-top: 12px; padding: 16px;\n  background: #f0faf5; border-radius: 10px;\n  border: 1px solid #b7e4d0; font-size: 15px;\n}\n</style>"
+      },
+      {
+        "name": "插值与表达式",
+        "desc": "{{ }} 文本插值与 JS 表达式",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>插值与表达式</h2>\n    <p>文本插值：{{ subject }}</p>\n    <p>表达式：{{ count * 2 }}</p>\n    <p>三元：{{ ok ? '是' : '否' }}</p>\n    <p>字符串方法：{{ subject.split('').reverse().join('') }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      subject: '前端课堂',\n      count: 21,\n      ok: true\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 14px; color: #444; }\n</style>"
+      },
+      {
+        "name": "v-text 与 v-html",
+        "desc": "文本与 HTML 片段渲染",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-text 与 v-html</h2>\n    <p v-text=\"plain\">这句的文案会被覆盖</p>\n    <p v-html=\"rich\">这句的文案会被覆盖</p>\n    <p>与插值对照：{{ plain }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      plain: '这是纯文本',\n      rich: '<b style=\"color:#2f9e7d\">这是加粗的 HTML 片段</b>'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 14px; color: #444; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "二、指令",
+    "icon": "🧭",
+    "items": [
+      {
+        "name": "v-if / v-else 条件渲染",
+        "desc": "条件分支显示",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-if 条件渲染</h2>\n    <button @click=\"toggle\">切换显示</button>\n    <p v-if=\"show\" class=\"box box-a\">show 为 true，我被渲染了</p>\n    <p v-else class=\"box box-b\">show 为 false，显示的是我</p>\n    <p v-show=\"show\" class=\"tip\">v-show 只是 display:none，一直在 DOM 里</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { show: true }\n  },\n  methods: {\n    toggle() {\n      this.show = !this.show\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton {\n  padding: 8px 18px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; font-size: 14px; cursor: pointer;\n}\n.box { margin-top: 14px; padding: 14px; border-radius: 10px; font-size: 14px; }\n.box-a { background: #e8f7f0; color: #1c7c54; border: 1px solid #b7e4d0; }\n.box-b { background: #fdf0e8; color: #b06a2c; border: 1px solid #f2d9c2; }\n.tip { color: #999; font-size: 12px; }\n</style>"
+      },
+      {
+        "name": "v-for 列表渲染",
+        "desc": "数组遍历与 index",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-for 列表渲染</h2>\n    <ul>\n      <li v-for=\"(item, index) in fruits\" :key=\"index\">\n        {{ index + 1 }}. {{ item.name }} —— ￥{{ item.price }}\n      </li>\n    </ul>\n    <button @click=\"add\">再加一个</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      fruits: [\n        { name: '苹果', price: 5 },\n        { name: '香蕉', price: 3 },\n        { name: '橙子', price: 6 }\n      ]\n    }\n  },\n  methods: {\n    add() {\n      this.fruits.push({ name: '葡萄', price: 12 })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nul { padding-left: 18px; }\nli { font-size: 14px; line-height: 2; }\nbutton {\n  padding: 8px 18px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>"
+      },
+      {
+        "name": "v-model 双向绑定",
+        "desc": "表单与数据同步",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-model 双向绑定</h2>\n    <input v-model=\"name\" placeholder=\"输入你的名字\" />\n    <p>你好，{{ name || '陌生人' }}！</p>\n    <textarea v-model=\"bio\" placeholder=\"一句话介绍自己\"></textarea>\n    <p>介绍：{{ bio }}</p>\n    <label><input type=\"checkbox\" v-model=\"agree\" /> 我已阅读并同意</label>\n    <p>勾选状态：{{ agree }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { name: '', bio: '', agree: false }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput[type=text], input:not([type]), textarea {\n  width: 100%; padding: 10px; margin: 6px 0;\n  border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px;\n}\ntextarea { height: 60px; }\nlabel { font-size: 14px; color: #444; }\np { color: #2f9e7d; font-size: 14px; }\n</style>"
+      },
+      {
+        "name": "v-else-if 多分支",
+        "desc": "三个分支按分数切换",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-else-if 多分支</h2>\n    <p>当前分数：{{ score }}</p>\n    <div class=\"row\">\n      <button @click=\"score = 95\">95 分</button>\n      <button @click=\"score = 72\">72 分</button>\n      <button @click=\"score = 40\">40 分</button>\n    </div>\n    <p v-if=\"score >= 90\" class=\"lv a\">优秀</p>\n    <p v-else-if=\"score >= 60\" class=\"lv b\">及格</p>\n    <p v-else class=\"lv c\">不及格</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { score: 72 }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 7px 14px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n.lv { margin-top: 12px; padding: 12px; border-radius: 10px; font-size: 15px; }\n.a { background: #e8f7f0; color: #1c7c54; }\n.b { background: #fdf6e0; color: #9a7b1c; }\n.c { background: #fdecec; color: #b0353f; }\n</style>"
+      },
+      {
+        "name": "v-show 与 v-if 的差异",
+        "desc": "销毁重建 vs display 切换",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-show 与 v-if</h2>\n    <button @click=\"flag = !flag\">切换 flag（当前 {{ flag }}）</button>\n    <p v-if=\"flag\" class=\"a\">v-if：flag 为假时我直接从 DOM 中消失</p>\n    <p v-show=\"flag\" class=\"b\">v-show：我一直都在，只是 display 被改成 none</p>\n    <p class=\"tip\">反复点击按钮，观察两行文字的行为差异</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { flag: true }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\np { font-size: 14px; margin-top: 12px; padding: 12px; border-radius: 8px; }\n.a { background: #e8f7f0; color: #1c7c54; }\n.b { background: #eef2ff; color: #2d4390; }\n.tip { color: #999; font-size: 12px; background: none; padding: 0; }\n</style>"
+      },
+      {
+        "name": "v-for 嵌套分组",
+        "desc": "组里再遍历成员",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>v-for 嵌套</h2>\n    <div class=\"group\" v-for=\"(g, gi) in groups\" :key=\"gi\">\n      <p class=\"gt\">{{ gi + 1 }}. {{ g.title }}</p>\n      <ul>\n        <li v-for=\"(m, mi) in g.members\" :key=\"mi\">{{ mi + 1 }}）{{ m }}</li>\n      </ul>\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      groups: [\n        { title: '甲组', members: ['张三', '李四'] },\n        { title: '乙组', members: ['王五', '赵六', '孙七'] }\n      ]\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.group { padding: 10px 12px; margin-top: 10px; background: #f6f8fa; border-radius: 10px; }\n.gt { margin: 0 0 6px; font-weight: 600; }\nul { margin: 0; padding-left: 20px; }\nli { font-size: 14px; color: #444; line-height: 1.9; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "三、事件与绑定",
+    "icon": "🖱",
+    "items": [
+      {
+        "name": "v-on 事件处理",
+        "desc": "@click 传参与 $event",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>事件处理</h2>\n    <p>count: {{ count }}</p>\n    <button @click=\"increment\">+1</button>\n    <button @click=\"addBy(10)\">+10</button>\n    <button @click=\"count = 0\">内联重置</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { count: 0 }\n  },\n  methods: {\n    increment() {\n      this.count++\n    },\n    addBy(n) {\n      this.count += n\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 18px; font-weight: 600; }\nbutton {\n  margin: 4px; padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer; font-size: 14px;\n}\n</style>"
+      },
+      {
+        "name": ":class 与 :style 绑定",
+        "desc": "对象/数组语法动态样式",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>class 与 style 绑定</h2>\n    <div class=\"box\" :class=\"{ active: isActive }\" @click=\"isActive = !isActive\">\n      点击我切换 active（对象语法）\n    </div>\n    <div class=\"box\" :style=\"{ background: bgColor, fontSize: size + 'px' }\">\n      :style 对象语法\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      isActive: false,\n      bgColor: '#4c8dff',\n      size: 15\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.box {\n  padding: 14px; margin-top: 10px; border-radius: 10px;\n  background: #f2f3f5; font-size: 14px; cursor: pointer;\n}\n.box.active { background: #2f9e7d; color: #fff; }\n</style>"
+      },
+      {
+        "name": ":disabled 与按钮协作",
+        "desc": "到达上限自动禁用",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>按钮与禁用状态</h2>\n    <p class=\"num\">已选 {{ count }} / 3</p>\n    <button :disabled=\"count >= 3\" @click=\"add\">加一</button>\n    <button :disabled=\"count === 0\" @click=\"reset\">清零</button>\n    <p class=\"tip\" v-if=\"count >= 3\">已达上限，「加一」按钮被禁用</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { count: 0 }\n  },\n  methods: {\n    add() {\n      if (this.count < 3) {\n        this.count++\n      }\n    },\n    reset() {\n      this.count = 0\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.num { font-size: 18px; font-weight: 600; }\nbutton { padding: 8px 16px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\nbutton:disabled { background: #cfd4dc; color: #888; cursor: not-allowed; }\n.tip { color: #b0353f; font-size: 13px; }\n</style>"
+      },
+      {
+        "name": ":class 数组语法",
+        "desc": "数组 + 三元 + 拼接类名",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>:class 数组语法</h2>\n    <div class=\"box\" :class=\"[base, big ? 'big' : 'small']\" @click=\"big = !big\">\n      点我切换字号\n    </div>\n    <div class=\"box\" :class=\"['tag', 'tag-' + level]\">当前等级：{{ level }}</div>\n    <button @click=\"level = level + 1\">level +1</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { base: 'card', big: true, level: 1 }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.box { margin-top: 10px; padding: 14px; border-radius: 10px; background: #f2f3f5; }\n.card { border: 1px solid #b7e4d0; }\n.big { font-size: 18px; }\n.small { font-size: 12px; }\n.tag { color: #fff; }\n.tag-1 { background: #4c8dff; }\n.tag-2 { background: #e8590c; }\n.tag-3 { background: #12263F; }\nbutton { margin-top: 12px; padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n</style>"
+      },
+      {
+        "name": ":href 与 :src 绑定",
+        "desc": "链接与图片地址来自数据",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>绑定 href 与 src</h2>\n    <img :src=\"icon\" :class=\"{ round: round }\" width=\"60\" height=\"60\" @click=\"round = !round\" />\n    <p class=\"tip\">点图片切换圆角，round = {{ round }}</p>\n    <p><a :href=\"link\" :title=\"link\">用 :href 绑定的链接</a></p>\n    <p class=\"addr\">图片地址来自 data 里的 icon 字段</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      link: 'https://vuejs.org',\n      round: false,\n      icon: 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\"><rect width=\"60\" height=\"60\" fill=\"%232f9e7d\"/><text x=\"30\" y=\"40\" font-size=\"28\" text-anchor=\"middle\" fill=\"%23ffffff\">V</text></svg>'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nimg { border-radius: 4px; cursor: pointer; }\nimg.round { border-radius: 50%; }\np { font-size: 14px; }\n.tip { color: #888; font-size: 12px; }\n.addr { color: #bbb; font-size: 11px; }\na { color: #4c8dff; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "四、计算属性与侦听器",
+    "icon": "🧮",
+    "items": [
+      {
+        "name": "computed 计算属性",
+        "desc": "派生数据自动缓存",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>computed 计算属性</h2>\n    <p>姓：{{ xing }}　名：{{ ming }}</p>\n    <p>全名（computed）：{{ quanMing }}</p>\n    <button @click=\"xing = '王'\">改姓</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { xing: '张', ming: '三' }\n  },\n  computed: {\n    quanMing() {\n      return this.xing + this.ming\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 15px; }\nbutton {\n  padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>"
+      },
+      {
+        "name": "watch 侦听器",
+        "desc": "监听数据变化执行逻辑",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>watch 侦听器</h2>\n    <input v-model=\"question\" placeholder=\"输入问题，我会记录变化\" />\n    <p>问题：{{ question }}</p>\n    <p class=\"log\">变更记录：{{ logText }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { question: '', history: [] }\n  },\n  watch: {\n    question(newVal, oldVal) {\n      this.history.push('\"' + oldVal + '\" → \"' + newVal + '\"')\n    }\n  },\n  computed: {\n    logText() {\n      return this.history.join('；') || '（暂无）'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput {\n  width: 100%; padding: 10px; border: 1px solid #dcdfe6;\n  border-radius: 8px; font-size: 14px;\n}\np { font-size: 14px; }\n.log { color: #999; font-size: 12px; }\n</style>"
+      },
+      {
+        "name": "computed 组合派生",
+        "desc": "求和 / 平均 / 过滤",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>computed 组合派生</h2>\n    <p>总价：￥{{ total }}　均价：￥{{ avg }}</p>\n    <p class=\"cap\">贵过 5 元的：</p>\n    <ul>\n      <li v-for=\"(f, i) in expensive\" :key=\"i\">{{ f.name }} ￥{{ f.price }}</li>\n    </ul>\n    <button @click=\"add\">再来一份蓝莓 ￥8</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      list: [\n        { name: '青苹果', price: 6 },\n        { name: '甜橙', price: 4 }\n      ]\n    }\n  },\n  computed: {\n    total() {\n      var s = 0\n      this.list.forEach(function (f) { s += f.price })\n      return s\n    },\n    avg() {\n      return Math.round(this.total / this.list.length)\n    },\n    expensive() {\n      return this.list.filter(function (f) { return f.price > 5 })\n    }\n  },\n  methods: {\n    add() {\n      this.list.push({ name: '蓝莓', price: 8 })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 15px; }\n.cap { color: #888; font-size: 13px; }\nli { font-size: 14px; line-height: 1.9; }\nbutton { margin-top: 8px; padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n</style>"
+      },
+      {
+        "name": "computed 的 get 与 set",
+        "desc": "可写计算属性",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>computed 读写</h2>\n    <input v-model=\"quanMing\" placeholder=\"直接在框里改全名\" />\n    <p>姓：{{ xing }}　名：{{ ming }}</p>\n    <p class=\"tip\">quanMing 没有存在 data 里，写它会拆进姓和名</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { xing: '张', ming: '三' }\n  },\n  computed: {\n    quanMing: {\n      get() {\n        return this.xing + this.ming\n      },\n      set(v) {\n        this.xing = v.charAt(0)\n        this.ming = v.slice(1) || '氏'\n      }\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; }\np { font-size: 14px; }\n.tip { color: #999; font-size: 12px; }\n</style>"
+      },
+      {
+        "name": "watch 对象写法与 immediate",
+        "desc": "deep / immediate / handler",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>watch 进阶写法</h2>\n    <button @click=\"change\">切换城市</button>\n    <p>城市：{{ user.city }}</p>\n    <p class=\"log\">{{ log }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { user: { city: '杭州' }, log: '' }\n  },\n  watch: {\n    user: {\n      deep: true,\n      immediate: true,\n      handler(nv) {\n        this.log = 'handler 看到：' + nv.city\n      }\n    }\n  },\n  methods: {\n    change() {\n      this.user.city = this.user.city === '杭州' ? '成都' : '杭州'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\np { font-size: 14px; }\n.log { color: #1c7c54; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "五、组件化",
+    "icon": "🧩",
+    "items": [
+      {
+        "name": "components 局部组件",
+        "desc": "props 传值 + 组件复用",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>局部组件与 props</h2>\n    <duty-item v-for=\"(t, i) in dutyList\" :key=\"i\" :text=\"t.text\" :done=\"t.done\"></duty-item>\n    <button @click=\"toggleFirst\">切换第一项状态</button>\n  </div>\n</template>\n<script>\n// 局部子组件（对象形式定义，template 为字符串）\nvar DutyItem = {\n  props: ['text', 'done'],\n  template: '<div class=\"todo\" :class=\"{ done: done }\">{{ done ? \"√\" : \"○\" }} {{ text }}</div>'\n}\nexport default {\n  components: { 'duty-item': DutyItem },\n  data() {\n    return {\n      dutyList: [\n        { text: '学习组件语法', done: true },\n        { text: '写一个小项目', done: false },\n        { text: '复习组件通信', done: false }\n      ]\n    }\n  },\n  methods: {\n    toggleFirst() {\n      this.dutyList[0].done = !this.dutyList[0].done\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.duty {\n  padding: 10px 14px; margin-top: 8px; border-radius: 8px;\n  background: #f6f8fa; font-size: 14px;\n}\n.duty.done { color: #aaa; text-decoration: line-through; }\nbutton {\n  margin-top: 12px; padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>"
+      },
+      {
+        "name": "生命周期 created / mounted",
+        "desc": "钩子执行时机",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>生命周期</h2>\n    <p>打开控制台查看打印顺序</p>\n    <div class=\"stage\">{{ stage }}</div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { stage: '初始化中...' }\n  },\n  created() {\n    console.log('1. created：数据已就绪，DOM 还没有')\n    this.stage = 'created 已执行（DOM 未挂载）'\n  },\n  mounted() {\n    console.log('2. mounted：DOM 已挂载完成')\n    this.stage = 'mounted 已执行（DOM 就绪）'\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { color: #888; font-size: 13px; }\n.stage {\n  margin-top: 12px; padding: 16px; border-radius: 10px;\n  background: #f0faf5; color: #1c7c54; font-size: 15px;\n}\n</style>"
+      },
+      {
+        "name": "props 对象写法与默认值",
+        "desc": "不传值时走 default",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>props 默认值</h2>\n    <div class=\"row\"><badge></badge><span>一个参数都没传</span></div>\n    <div class=\"row\"><badge text=\"已完成\" tone=\"ok\"></badge><span>传了 text 与 tone</span></div>\n    <div class=\"row\"><badge text=\"待处理\" tone=\"warn\"></badge><span>同一组件第二个用法</span></div>\n  </div>\n</template>\n<script>\nvar Badge = {\n  props: {\n    text: { default: '未命名' },\n    tone: { default: 'muted' }\n  },\n  template: '<span class=\"tag\" :class=\"tone\">{{ text }}</span>'\n}\nexport default {\n  components: { 'badge': Badge }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.row { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13px; color: #666; }\n.tag { padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #fff; }\n.ok { background: #2f9e7d; }\n.warn { background: #e8590c; }\n.muted { background: #8b93a7; }\n</style>"
+      },
+      {
+        "name": "子组件展示 + 父组件汇总",
+        "desc": "props 传值与 computed 配合",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>组件与计算属性配合</h2>\n    <fruit-row v-for=\"(f, i) in list\" :key=\"i\" :name=\"f.name\" :price=\"f.price\"></fruit-row>\n    <p class=\"sum\">共 {{ list.length }} 种，均价 ￥{{ avg }}</p>\n  </div>\n</template>\n<script>\nvar FruitRow = {\n  props: ['name', 'price'],\n  template: '<div class=\"row\"><span>{{ name }}</span><b>￥{{ price }}</b></div>'\n}\nexport default {\n  components: { 'fruit-row': FruitRow },\n  data() {\n    return {\n      list: [\n        { name: '青苹果', price: 6 },\n        { name: '甜橙', price: 4 },\n        { name: '沙糖桔', price: 5 }\n      ]\n    }\n  },\n  computed: {\n    avg() {\n      var s = 0\n      this.list.forEach(function (f) { s += f.price })\n      return Math.round(s / this.list.length)\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.row { display: flex; justify-content: space-between; padding: 10px 12px; margin-top: 8px; background: #f6f8fa; border-radius: 8px; font-size: 14px; }\n.sum { margin-top: 12px; color: #1c7c54; font-size: 14px; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "六、表单与 v-model 进阶",
+    "icon": "🧾",
+    "items": [
+      {
+        "name": "单选按钮组",
+        "desc": "radio 共用一个数据",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>单选按钮组</h2>\n    <label><input type=\"radio\" value=\"青苹果\" v-model=\"fruit\" /> 青苹果</label>\n    <label><input type=\"radio\" value=\"甜橙\" v-model=\"fruit\" /> 甜橙</label>\n    <label><input type=\"radio\" value=\"沙糖桔\" v-model=\"fruit\" /> 沙糖桔</label>\n    <p>你选了：{{ fruit || '还没选' }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { fruit: '' }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nlabel { display: block; font-size: 14px; line-height: 2; color: #444; }\np { margin-top: 12px; color: #2f9e7d; font-size: 14px; }\n</style>"
+      },
+      {
+        "name": "下拉框与复选清单",
+        "desc": "select 与 checkbox 数组",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>下拉框与多选</h2>\n    <select v-model=\"city\">\n      <option value=\"\">请选择城市</option>\n      <option v-for=\"(c, i) in cities\" :key=\"i\" :value=\"c\">{{ c }}</option>\n    </select>\n    <p>当前城市：{{ city || '—' }}</p>\n    <div class=\"box\">\n      <label v-for=\"(t, i) in tasks\" :key=\"i\">\n        <input type=\"checkbox\" :value=\"t\" v-model=\"done\" /> {{ t }}\n      </label>\n    </div>\n    <p class=\"sum\">已完成 {{ done.length }} 项</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      city: '',\n      cities: ['杭州', '成都', '西安'],\n      tasks: ['预习课件', '完成练习', '提交报告'],\n      done: []\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nselect { width: 100%; padding: 9px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; }\n.box { margin-top: 12px; padding: 10px 12px; background: #f6f8fa; border-radius: 10px; }\nlabel { display: block; font-size: 14px; line-height: 2; }\np { font-size: 14px; color: #2f9e7d; }\n.sum { font-weight: 600; }\n</style>"
+      }
+    ]
+  },
+  {
+    "title": "七、响应式更新与实例 API",
+    "icon": "⚡",
+    "items": [
+      {
+        "name": "数组变异与 $set / $nextTick",
+        "desc": "增删改与更新时机",
+        "code": "<template>\n  <div class=\"page\">\n    <h2>数组与对象更新</h2>\n    <p class=\"list\">{{ list.join(' / ') }}</p>\n    <div class=\"row\">\n      <button @click=\"list.push('丁')\">push</button>\n      <button @click=\"list.splice(1, 1)\">删第二项</button>\n      <button @click=\"list.reverse()\">reverse</button>\n    </div>\n    <button class=\"wide\" @click=\"addKey\">用 $set 给对象加字段</button>\n    <p class=\"tip\">obj.k2：{{ obj.k2 || '尚未添加' }}</p>\n    <p class=\"tip\">$nextTick 里累加的计数：{{ tick }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { list: ['甲', '乙', '丙'], obj: { k1: 'A' }, tick: 0 }\n  },\n  methods: {\n    addKey() {\n      var self = this\n      this.$set(this.obj, 'k2', '由 $set 添加')\n      this.$nextTick(function () {\n        self.tick++\n      })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.list { font-size: 16px; font-weight: 600; }\nbutton { padding: 7px 12px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n.wide { display: block; margin-top: 10px; }\n.tip { color: #666; font-size: 13px; }\n</style>"
+      }
+    ]
+  }
+];

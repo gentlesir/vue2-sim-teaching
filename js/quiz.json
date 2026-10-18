@@ -1,0 +1,964 @@
+(window.SfcSim = window.SfcSim || {}).QUIZ_DATA = [    
+  {
+  "id": "q29-base1",
+  "group": "一、基础结构",
+  "name": "插值表达式与vue结构",
+  "desc": "插值表达式",
+  "score": 10,
+  "require": "将页面数据msg显示出啦",
+  "code": "<template>\n  <div class=\"page\">\n    <h2 class=\"title\">单文件组件</h2>\n    <p class=\"desc\">template 是结构，script 是逻辑，style 是样式</p>\n    <!-- ✎ 空1：插值表达式  -->\n    <div class=\"card\">%%1%%</div>\n  </div>\n</template>\n<script>\nexport default {\n  // ✎ 空2：页面数据 \n  %%2%%() {\n    return {\n      msg: '同学们好！'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\n.title { margin: 0 0 8px; color: #2f9e7d; }\n.desc { color: #888; font-size: 13px; }\n.card {\n  margin-top: 12px; padding: 16px;\n  background: #f0faf5; border-radius: 10px;\n  border: 1px solid #b7e4d0; font-size: 15px;\n}\n</style>",
+  "blanks": [
+    {
+      "i": 1,
+      "answers": [
+        "{{ msg }}"
+      ],
+      "tip": "插值表达式"
+    },
+    {
+      "i": 2,
+      "answers": [
+        "data"
+      ],
+      "tip": "页面数据"
+    }
+  ]
+},
+  {
+    "id": "q02-interp",
+    "group": "一、基础结构",
+    "name": "插值与表达式",
+    "desc": "{{ }} 文本插值与 JS 表达式",
+    "score": 10,
+    "require": "插值里可以写 JS 表达式：算式、三元、方法链都行。把下面三处表达式补全。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>插值与表达式</h2>\n    <p>文本插值：{{ subject }}</p>\n    <!-- ✎ 空1：把 count 乘以 2 后插值显示  -->\n    <p>表达式：%%1%%</p>\n    <!-- ✎ 空2：用三元表达式：ok 为真显示“是”，否则“否”  -->\n    <p>三元：%%2%%</p>\n    <!-- ✎ 空3：数组反转内容用哪个方法？  -->\n    <p>字符串方法：{{ subject.split('').%%3%%().join('') }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      subject: '前端课堂',\n      count: 21,\n      ok: true\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 14px; color: #444; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "{{ count * 2 }}"
+        ],
+        "tip": "把 count 乘以 2 后插值显示"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "{{ ok ? '是' : '否' }}"
+        ],
+        "tip": "用三元表达式：ok 为真显示“是”，否则“否”"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "reverse"
+        ],
+        "tip": "数组反转内容用哪个方法？"
+      }
+    ]
+  },
+  {
+    "id": "q03-if",
+    "group": "二、指令",
+    "name": "v-if / v-else 条件渲染",
+    "desc": "条件分支显示",
+    "score": 10,
+    "require": "同一个元素上补全条件指令与分支，并让按钮能把开关翻回来。第三行用的是另一种隐藏方式。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-if 条件渲染</h2>\n    <button @click=\"toggle\">切换显示</button>\n    <!-- ✎ 空1：条件为真才渲染，指令怎么写？  -->\n    <p %%1%% class=\"box box-a\">show 为 true，我被渲染了</p>\n    <!-- ✎ 空2：紧跟 v-if 元素的“否则”分支指令  -->\n    <p %%2%% class=\"box box-b\">show 为 false，显示的是我</p>\n    <!-- ✎ 空3：只切换 display、元素始终在 DOM 里的指令  -->\n    <p %%3%% class=\"tip\">v-show 只是 display:none，一直在 DOM 里</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { show: true }\n  },\n  methods: {\n    toggle() {\n      // ✎ 空4：把布尔值取反后赋回 show \n      this.show = %%4%%\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton {\n  padding: 8px 18px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; font-size: 14px; cursor: pointer;\n}\n.box { margin-top: 14px; padding: 14px; border-radius: 10px; font-size: 14px; }\n.box-a { background: #e8f7f0; color: #1c7c54; border: 1px solid #b7e4d0; }\n.box-b { background: #fdf0e8; color: #b06a2c; border: 1px solid #f2d9c2; }\n.tip { color: #999; font-size: 12px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-if=\"show\"",
+          "v-if='show'"
+        ],
+        "tip": "条件为真才渲染，指令怎么写？"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-else"
+        ],
+        "tip": "紧跟 v-if 元素的“否则”分支指令"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-show=\"show\"",
+          "v-show='show'"
+        ],
+        "tip": "只切换 display、元素始终在 DOM 里的指令"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "!this.show"
+        ],
+        "tip": "把布尔值取反后赋回 show"
+      }
+    ]
+  },
+  {
+    "id": "q04-for",
+    "group": "二、指令",
+    "name": "v-for 列表渲染",
+    "desc": "数组遍历与 index",
+    "score": 10,
+    "require": "遍历 fruits 数组渲染列表，注意形参顺序、key 绑定，以及点击按钮时往数组尾部加一项。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-for 列表渲染</h2>\n    <ul>\n      <!-- ✎ 空1：遍历数组并同时拿到下标  -->\n      <!-- ✎ 空2：用 v-bind 简写把下标绑到 key 上  -->\n      <li %%1%% %%2%%>\n        <!-- ✎ 空3：插值当前项的价格（属性访问）  -->\n        {{ index + 1 }}. {{ item.name }} —— ￥%%3%%\n      </li>\n    </ul>\n    <button @click=\"add\">再加一个</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      fruits: [\n        { name: '苹果', price: 5 },\n        { name: '香蕉', price: 3 },\n        { name: '橙子', price: 6 }\n      ]\n    }\n  },\n  methods: {\n    add() {\n      // ✎ 空4：数组尾部追加元素的方法 \n      this.fruits.%%4%%({ name: '葡萄', price: 12 })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nul { padding-left: 18px; }\nli { font-size: 14px; line-height: 2; }\nbutton {\n  padding: 8px 18px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-for=\"(item, index) in fruits\""
+        ],
+        "tip": "遍历数组并同时拿到下标"
+      },
+      {
+        "i": 2,
+        "answers": [
+          ":key=\"index\"",
+          "v-bind:key=\"index\"",
+          ":key='index'"
+        ],
+        "tip": "用 v-bind 简写把下标绑到 key 上"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "{{ item.price }}"
+        ],
+        "tip": "插值当前项的价格（属性访问）"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "push"
+        ],
+        "tip": "数组尾部追加元素的方法"
+      }
+    ]
+  },
+  {
+    "id": "q05-model",
+    "group": "二、指令",
+    "name": "v-model 双向绑定",
+    "desc": "表单与数据同步",
+    "score": 10,
+    "require": "三个表单控件（文本框、文本域、复选框）都要与 data 同步；再补出复选框的初始值类型。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-model 双向绑定</h2>\n    <!-- ✎ 空1：文本框与 name 双向绑定  -->\n    <input %%1%% placeholder=\"输入你的名字\" />\n    <p>你好，{{ name || '陌生人' }}！</p>\n    <!-- ✎ 空2：文本域与 bio 双向绑定  -->\n    <textarea %%2%% placeholder=\"一句话介绍自己\"></textarea>\n    <p>介绍：{{ bio }}</p>\n    <!-- ✎ 空3：复选框与 agree 双向绑定  -->\n    <label><input type=\"checkbox\" %%3%% /> 我已阅读并同意</label>\n    <p>勾选状态：{{ agree }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    // ✎ 空4：复选框未勾选时绑的是布尔值 false \n    return { name: '', bio: '', %%4%% }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput[type=text], input:not([type]), textarea {\n  width: 100%; padding: 10px; margin: 6px 0;\n  border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px;\n}\ntextarea { height: 60px; }\nlabel { font-size: 14px; color: #444; }\np { color: #2f9e7d; font-size: 14px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-model=\"name\"",
+          "v-model='name'"
+        ],
+        "tip": "文本框与 name 双向绑定"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-model=\"bio\"",
+          "v-model='bio'"
+        ],
+        "tip": "文本域与 bio 双向绑定"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-model=\"agree\"",
+          "v-model='agree'"
+        ],
+        "tip": "复选框与 agree 双向绑定"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "agree: false"
+        ],
+        "tip": "复选框未勾选时绑的是布尔值 false"
+      }
+    ]
+  },
+  {
+    "id": "q06-on",
+    "group": "三、事件与绑定",
+    "name": "v-on 事件处理",
+    "desc": "@click 传参与 $event",
+    "score": 10,
+    "require": "补全事件绑定与方法体：一个无参方法、一个带参方法调用，以及两种改数据的写法。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>事件处理</h2>\n    <p>count: {{ count }}</p>\n    <!-- ✎ 空1：点击时调用 increment 方法  -->\n    <button %%1%%>+1</button>\n    <!-- ✎ 空2：调用方法并传数字参数 10  -->\n    <button %%2%%>+10</button>\n    <button @click=\"count = 0\">内联重置</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { count: 0 }\n  },\n  methods: {\n    increment() {\n      // ✎ 空3：自增当前组件实例上的 count \n      %%3%%\n    },\n    addBy(n) {\n      // ✎ 空4：把 count 加上形参 n \n      %%4%%\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 18px; font-weight: 600; }\nbutton {\n  margin: 4px; padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer; font-size: 14px;\n}\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "@click=\"increment\"",
+          "v-on:click=\"increment\"",
+          "@click='increment'"
+        ],
+        "tip": "点击时调用 increment 方法"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "@click=\"addBy(10)\"",
+          "v-on:click=\"addBy(10)\""
+        ],
+        "tip": "调用方法并传数字参数 10"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.count++",
+          "this.count += 1",
+          "this.count = this.count + 1"
+        ],
+        "tip": "自增当前组件实例上的 count"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "this.count += n"
+        ],
+        "tip": "把 count 加上形参 n"
+      }
+    ]
+  },
+  {
+    "id": "q07-class",
+    "group": "三、事件与绑定",
+    "name": ":class 与 :style 绑定",
+    "desc": "对象/数组语法动态样式",
+    "score": 10,
+    "require": "第一个盒子用对象语法绑 class（点击切换 isActive），第二个盒子用对象语法绑内联样式。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>class 与 style 绑定</h2>\n    <!-- ✎ 空1：对象语法：键是类名，值是布尔开关  -->\n    <!-- ✎ 空2：点击时把开关取反  -->\n    <div class=\"box\" %%1%% @click=\"isActive = %%2%%\">\n      点击我切换 active（对象语法）\n    </div>\n    <!-- ✎ 空3：两个样式：背景色取 bgColor，字号取 size 拼上 px  -->\n    <div class=\"box\" :style=\"{ %%3%% }\">\n      :style 对象语法\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      isActive: false,\n      bgColor: '#4c8dff',\n      size: 15\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.box {\n  padding: 14px; margin-top: 10px; border-radius: 10px;\n  background: #f2f3f5; font-size: 14px; cursor: pointer;\n}\n.box.active { background: #2f9e7d; color: #fff; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          ":class=\"{ active: isActive }\""
+        ],
+        "tip": "对象语法：键是类名，值是布尔开关"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "!isActive"
+        ],
+        "tip": "点击时把开关取反"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "background: bgColor, fontSize: size + 'px'"
+        ],
+        "tip": "两个样式：背景色取 bgColor，字号取 size 拼上 px"
+      }
+    ]
+  },
+  {
+    "id": "q08-computed",
+    "group": "四、计算属性与侦听器",
+    "name": "computed 计算属性",
+    "desc": "派生数据自动缓存",
+    "score": 10,
+    "require": "全名不放在 data 里，而是由姓和名派生：补全选项名、派生表达式和模板里的取用方式。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>computed 计算属性</h2>\n    <p>姓：{{ xing }}　名：{{ ming }}</p>\n    <!-- ✎ 空2：计算属性像 data 一样直接用名字取  -->\n    <p>全名（computed）：%%2%%</p>\n    <button @click=\"xing = '王'\">改姓</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { xing: '张', ming: '三' }\n  },\n  // ✎ 空1：声明派生数据的选项名 \n  %%1%%: {\n    quanMing() {\n      // ✎ 空3：把实例上的姓与名拼接起来 \n      return %%3%%\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 15px; }\nbutton {\n  padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "computed"
+        ],
+        "tip": "声明派生数据的选项名"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "{{ quanMing }}"
+        ],
+        "tip": "计算属性像 data 一样直接用名字取"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.xing + this.ming"
+        ],
+        "tip": "把实例上的姓与名拼接起来"
+      }
+    ]
+  },
+  {
+    "id": "q09-watch",
+    "group": "四、计算属性与侦听器",
+    "name": "watch 侦听器",
+    "desc": "监听数据变化执行逻辑",
+    "score": 10,
+    "require": "监听 question 的变化，把每次“旧值 → 新值”记录进 history 数组。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>watch 侦听器</h2>\n    <input v-model=\"question\" placeholder=\"输入问题，我会记录变化\" />\n    <p>问题：{{ question }}</p>\n    <p class=\"log\">变更记录：{{ logText }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { question: '', history: [] }\n  },\n  // ✎ 空1：声明侦听器的选项名 \n  %%1%%: {\n    // ✎ 空2：侦听函数的两个形参依次是新值、旧值 \n    question(%%2%%) {\n      // ✎ 空3：向实例上的 history 数组尾部追加一条记录 \n      %%3%%('\"' + oldVal + '\" → \"' + newVal + '\"')\n    }\n  },\n  computed: {\n    logText() {\n      return this.history.join('；') || '（暂无）'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput {\n  width: 100%; padding: 10px; border: 1px solid #dcdfe6;\n  border-radius: 8px; font-size: 14px;\n}\np { font-size: 14px; }\n.log { color: #999; font-size: 12px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "watch"
+        ],
+        "tip": "声明侦听器的选项名"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "newVal, oldVal"
+        ],
+        "tip": "侦听函数的两个形参依次是新值、旧值"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.history.push"
+        ],
+        "tip": "向实例上的 history 数组尾部追加一条记录"
+      }
+    ]
+  },
+  {
+    "id": "q10-comp",
+    "group": "五、组件化",
+    "name": "components 局部组件",
+    "desc": "props 传值 + 组件复用",
+    "score": 10,
+    "require": "子组件 DutyItem 已定义好，需要：接收父值的声明、在根实例里注册它、并在模板中循环渲染并逐项传参。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>局部组件与 props</h2>\n    <!-- ✎ 空3：遍历 dutyList，形参为项 t 与下标 i  -->\n    <!-- ✎ 空4：把当前项的文字绑到子组件的 text 属性上  -->\n    <duty-item %%3%% :key=\"i\" %%4%% :done=\"t.done\"></duty-item>\n    <button @click=\"toggleFirst\">切换第一项状态</button>\n  </div>\n</template>\n<script>\n// 局部子组件（对象形式定义，template 为字符串）\nvar DutyItem = {\n  // ✎ 空1：子组件声明“我能接收哪些属性”的选项名 \n  %%1%%: ['text', 'done'],\n  template: '<div class=\"todo\" :class=\"{ done: done }\">{{ done ? \"√\" : \"○\" }} {{ text }}</div>'\n}\nexport default {\n  // ✎ 空2：注册局部组件的选项名 \n  %%2%%: { 'duty-item': DutyItem },\n  data() {\n    return {\n      dutyList: [\n        { text: '学习组件语法', done: true },\n        { text: '写一个小项目', done: false },\n        { text: '复习组件通信', done: false }\n      ]\n    }\n  },\n  methods: {\n    toggleFirst() {\n      this.dutyList[0].done = !this.dutyList[0].done\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.duty {\n  padding: 10px 14px; margin-top: 8px; border-radius: 8px;\n  background: #f6f8fa; font-size: 14px;\n}\n.duty.done { color: #aaa; text-decoration: line-through; }\nbutton {\n  margin-top: 12px; padding: 8px 16px; border: none; border-radius: 8px;\n  background: #2f9e7d; color: #fff; cursor: pointer;\n}\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "props"
+        ],
+        "tip": "子组件声明“我能接收哪些属性”的选项名"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "components"
+        ],
+        "tip": "注册局部组件的选项名"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-for=\"(t, i) in dutyList\""
+        ],
+        "tip": "遍历 dutyList，形参为项 t 与下标 i"
+      },
+      {
+        "i": 4,
+        "answers": [
+          ":text=\"t.text\""
+        ],
+        "tip": "把当前项的文字绑到子组件的 text 属性上"
+      }
+    ]
+  },
+  {
+    "id": "q11-life",
+    "group": "五、组件化",
+    "name": "生命周期 created / mounted",
+    "desc": "钩子执行时机",
+    "score": 10,
+    "require": "两个钩子按执行时机填空：数据已就绪但 DOM 未挂载时走哪个？挂载完成后又走哪个？钩子内部通过什么引用改数据？",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>生命周期</h2>\n    <p>打开控制台查看打印顺序</p>\n    <div class=\"stage\">{{ stage }}</div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { stage: '初始化中...' }\n  },\n  // ✎ 空1：数据已就绪、DOM 还没有——这个钩子名 \n  %%1%%() {\n    console.log('1. created：数据已就绪，DOM 还没有')\n    // ✎ 空3：钩子里改实例上的 stage 字段 \n    %%3%% = 'created 已执行（DOM 未挂载）'\n  },\n  // ✎ 空2：DOM 已挂载完成——这个钩子名 \n  %%2%%() {\n    console.log('2. mounted：DOM 已挂载完成')\n    this.stage = 'mounted 已执行（DOM 就绪）'\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { color: #888; font-size: 13px; }\n.stage {\n  margin-top: 12px; padding: 16px; border-radius: 10px;\n  background: #f0faf5; color: #1c7c54; font-size: 15px;\n}\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "created"
+        ],
+        "tip": "数据已就绪、DOM 还没有——这个钩子名"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "mounted"
+        ],
+        "tip": "DOM 已挂载完成——这个钩子名"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.stage"
+        ],
+        "tip": "钩子里改实例上的 stage 字段"
+      }
+    ]
+  },
+  {
+    "id": "q12-vtext",
+    "group": "一、基础结构",
+    "name": "v-text 与 v-html",
+    "desc": "文本与 HTML 片段渲染",
+    "score": 10,
+    "require": "同一个数据要既能当纯文本输出，也要能当 HTML 片段渲染：补全两个指令与字符串初值。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-text 与 v-html</h2>\n    <!-- ✎ 空1：把内容当纯文本写入元素，用哪个指令？  -->\n    <p %%1%%>这句的文案会被覆盖</p>\n    <!-- ✎ 空2：要渲染成真正的 HTML 标签，换哪个指令？  -->\n    <p %%2%%>这句的文案会被覆盖</p>\n    <p>与插值对照：{{ plain }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      // ✎ 空3：字符串值必须带引号 \n      plain: %%3%%,\n      rich: '<b style=\"color:#2f9e7d\">这是加粗的 HTML 片段</b>'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 14px; color: #444; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-text=\"plain\"",
+          "v-text='plain'"
+        ],
+        "tip": "把内容当纯文本写入元素，用哪个指令？"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-html=\"rich\"",
+          "v-html='rich'"
+        ],
+        "tip": "要渲染成真正的 HTML 标签，换哪个指令？"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "'这是纯文本'",
+          "\"这是纯文本\""
+        ],
+        "tip": "字符串值必须带引号"
+      }
+    ]
+  },
+  {
+    "id": "q13-elseif",
+    "group": "二、指令",
+    "name": "v-else-if 多分支",
+    "desc": "三个分支按分数切换",
+    "score": 10,
+    "require": "按分数分三档显示评语：第一条走 v-if，中间那条要写“否则如果”，最后一条兜底；再补 data 初值。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-else-if 多分支</h2>\n    <p>当前分数：{{ score }}</p>\n    <div class=\"row\">\n      <button @click=\"score = 95\">95 分</button>\n      <button @click=\"score = 72\">72 分</button>\n      <button @click=\"score = 40\">40 分</button>\n    </div>\n    <!-- ✎ 空1：第一个分支：优秀  -->\n    <p %%1%% class=\"lv a\">优秀</p>\n    <!-- ✎ 空2：第二个分支：否则如果及格  -->\n    <p %%2%% class=\"lv b\">及格</p>\n    <!-- ✎ 空3：以上都不满足时的兜底分支  -->\n    <p %%3%% class=\"lv c\">不及格</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    // ✎ 空4：初值决定首屏落在哪个分支 \n    return { %%4%% }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 7px 14px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n.lv { margin-top: 12px; padding: 12px; border-radius: 10px; font-size: 15px; }\n.a { background: #e8f7f0; color: #1c7c54; }\n.b { background: #fdf6e0; color: #9a7b1c; }\n.c { background: #fdecec; color: #b0353f; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-if=\"score >= 90\""
+        ],
+        "tip": "第一个分支：优秀"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-else-if=\"score >= 60\""
+        ],
+        "tip": "第二个分支：否则如果及格"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-else"
+        ],
+        "tip": "以上都不满足时的兜底分支"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "score: 72"
+        ],
+        "tip": "初值决定首屏落在哪个分支"
+      }
+    ]
+  },
+  {
+    "id": "q14-show",
+    "group": "二、指令",
+    "name": "v-show 与 v-if 的差异",
+    "desc": "销毁重建 vs display 切换",
+    "score": 10,
+    "require": "两行文字用不同的隐藏方式，按钮把它们同时切换：第一行用会销毁重建的指令，第二行用只改 display 的指令。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-show 与 v-if</h2>\n    <!-- ✎ 空3：点击时把开关取反  -->\n    <button @click=\"%%3%%\">切换 flag（当前 {{ flag }}）</button>\n    <!-- ✎ 空1：条件为假时直接从 DOM 移除  -->\n    <p %%1%% class=\"a\">v-if：flag 为假时我直接从 DOM 中消失</p>\n    <!-- ✎ 空2：条件为假时只加 display:none  -->\n    <p %%2%% class=\"b\">v-show：我一直都在，只是 display 被改成 none</p>\n    <p class=\"tip\">反复点击按钮，观察两行文字的行为差异</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { flag: true }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\np { font-size: 14px; margin-top: 12px; padding: 12px; border-radius: 8px; }\n.a { background: #e8f7f0; color: #1c7c54; }\n.b { background: #eef2ff; color: #2d4390; }\n.tip { color: #999; font-size: 12px; background: none; padding: 0; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-if=\"flag\"",
+          "v-if='flag'"
+        ],
+        "tip": "条件为假时直接从 DOM 移除"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-show=\"flag\"",
+          "v-show='flag'"
+        ],
+        "tip": "条件为假时只加 display:none"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "flag = !flag"
+        ],
+        "tip": "点击时把开关取反"
+      }
+    ]
+  },
+  {
+    "id": "q15-nestedfor",
+    "group": "二、指令",
+    "name": "v-for 嵌套分组",
+    "desc": "组里再遍历成员",
+    "score": 10,
+    "require": "外层遍历分组、内层遍历该组的成员，两处 v-for 的形参和数据来源都要写对。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>v-for 嵌套</h2>\n    <!-- ✎ 空1：外层：遍历 groups，形参为组 g 与下标 gi  -->\n    <div class=\"group\" %%1%% :key=\"gi\">\n      <!-- ✎ 空3：显示当前组的组名  -->\n      <p class=\"gt\">{{ gi + 1 }}. %%3%%</p>\n      <ul>\n        <!-- ✎ 空2：内层：遍历当前组的 members  -->\n        <li %%2%% :key=\"mi\">{{ mi + 1 }}）{{ m }}</li>\n      </ul>\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      groups: [\n        { title: '甲组', members: ['张三', '李四'] },\n        { title: '乙组', members: ['王五', '赵六', '孙七'] }\n      ]\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.group { padding: 10px 12px; margin-top: 10px; background: #f6f8fa; border-radius: 10px; }\n.gt { margin: 0 0 6px; font-weight: 600; }\nul { margin: 0; padding-left: 20px; }\nli { font-size: 14px; color: #444; line-height: 1.9; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-for=\"(g, gi) in groups\""
+        ],
+        "tip": "外层：遍历 groups，形参为组 g 与下标 gi"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "v-for=\"(m, mi) in g.members\""
+        ],
+        "tip": "内层：遍历当前组的 members"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "{{ g.title }}"
+        ],
+        "tip": "显示当前组的组名"
+      }
+    ]
+  },
+  {
+    "id": "q16-disabled",
+    "group": "三、事件与绑定",
+    "name": ":disabled 与按钮协作",
+    "desc": "到达上限自动禁用",
+    "score": 10,
+    "require": "选到 3 个就不许再选：补全按钮上的禁用绑定、点击绑定，以及方法里的保护判断。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>按钮与禁用状态</h2>\n    <p class=\"num\">已选 {{ count }} / 3</p>\n    <!-- ✎ 空1：到达上限时禁用按钮  -->\n    <!-- ✎ 空2：点击调用 add 方法  -->\n    <button %%1%% %%2%%>加一</button>\n    <button :disabled=\"count === 0\" @click=\"reset\">清零</button>\n    <p class=\"tip\" v-if=\"count >= 3\">已达上限，「加一」按钮被禁用</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { count: 0 }\n  },\n  methods: {\n    add() {\n      // ✎ 空3：方法内部也要挡住越界 \n      if (%%3%%) {\n        // ✎ 空4：计数加一 \n        %%4%%\n      }\n    },\n    reset() {\n      this.count = 0\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.num { font-size: 18px; font-weight: 600; }\nbutton { padding: 8px 16px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\nbutton:disabled { background: #cfd4dc; color: #888; cursor: not-allowed; }\n.tip { color: #b0353f; font-size: 13px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          ":disabled=\"count >= 3\"",
+          "v-bind:disabled=\"count>=3\""
+        ],
+        "tip": "到达上限时禁用按钮"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "@click=\"add\"",
+          "v-on:click=\"add\""
+        ],
+        "tip": "点击调用 add 方法"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.count < 3"
+        ],
+        "tip": "方法内部也要挡住越界"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "this.count++",
+          "this.count += 1"
+        ],
+        "tip": "计数加一"
+      }
+    ]
+  },
+  {
+    "id": "q17-classarr",
+    "group": "三、事件与绑定",
+    "name": ":class 数组语法",
+    "desc": "数组 + 三元 + 拼接类名",
+    "score": 10,
+    "require": "第一个盒子用数组语法（固定类名 + 三元选择），第二个盒子用字符串拼接生成类名，按钮负责改 level。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>:class 数组语法</h2>\n    <!-- ✎ 空1：数组语法：多个类名放数组里，条件类用三元  -->\n    <div class=\"box\" %%1%% @click=\"big = !big\">\n      点我切换字号\n    </div>\n    <!-- ✎ 空2：把等级拼进类名后缀  -->\n    <div class=\"box\" :class=\"['tag', %%2%%]\">当前等级：{{ level }}</div>\n    <!-- ✎ 空3：点击后让 level 递增  -->\n    <button @click=\"%%3%%\">level +1</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { base: 'card', big: true, level: 1 }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.box { margin-top: 10px; padding: 14px; border-radius: 10px; background: #f2f3f5; }\n.card { border: 1px solid #b7e4d0; }\n.big { font-size: 18px; }\n.small { font-size: 12px; }\n.tag { color: #fff; }\n.tag-1 { background: #4c8dff; }\n.tag-2 { background: #e8590c; }\n.tag-3 { background: #12263F; }\nbutton { margin-top: 12px; padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          ":class=\"[base, big ? 'big' : 'small']\""
+        ],
+        "tip": "数组语法：多个类名放数组里，条件类用三元"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "'tag-' + level",
+          "\"tag-\"+level"
+        ],
+        "tip": "把等级拼进类名后缀"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "level = level + 1",
+          "level++"
+        ],
+        "tip": "点击后让 level 递增"
+      }
+    ]
+  },
+  {
+    "id": "q18-hrefsrc",
+    "group": "三、事件与绑定",
+    "name": ":href 与 :src 绑定",
+    "desc": "链接与图片地址来自数据",
+    "score": 10,
+    "require": "图片地址、链接地址都来自 data；圆角样式由布尔值控制。补全三处绑定。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>绑定 href 与 src</h2>\n    <!-- ✎ 空1：图片地址绑定 data 里的 icon  -->\n    <!-- ✎ 空2：对象语法控制圆角类名  -->\n    <img %%1%% %%2%% width=\"60\" height=\"60\" @click=\"round = !round\" />\n    <p class=\"tip\">点图片切换圆角，round = {{ round }}</p>\n    <!-- ✎ 空3：链接地址绑定 data 里的 link  -->\n    <p><a %%3%% :title=\"link\">用 :href 绑定的链接</a></p>\n    <p class=\"addr\">图片地址来自 data 里的 icon 字段</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      link: 'https://vuejs.org',\n      round: false,\n      icon: 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\"><rect width=\"60\" height=\"60\" fill=\"%232f9e7d\"/><text x=\"30\" y=\"40\" font-size=\"28\" text-anchor=\"middle\" fill=\"%23ffffff\">V</text></svg>'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nimg { border-radius: 4px; cursor: pointer; }\nimg.round { border-radius: 50%; }\np { font-size: 14px; }\n.tip { color: #888; font-size: 12px; }\n.addr { color: #bbb; font-size: 11px; }\na { color: #4c8dff; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          ":src=\"icon\"",
+          "v-bind:src=\"icon\""
+        ],
+        "tip": "图片地址绑定 data 里的 icon"
+      },
+      {
+        "i": 2,
+        "answers": [
+          ":class=\"{ round: round }\""
+        ],
+        "tip": "对象语法控制圆角类名"
+      },
+      {
+        "i": 3,
+        "answers": [
+          ":href=\"link\"",
+          "v-bind:href=\"link\""
+        ],
+        "tip": "链接地址绑定 data 里的 link"
+      }
+    ]
+  },
+  {
+    "id": "q19-computedset",
+    "group": "四、计算属性与侦听器",
+    "name": "computed 组合派生",
+    "desc": "求和 / 平均 / 过滤",
+    "score": 10,
+    "require": "三个派生值都写在同一个选项里：求和循环体、平均值表达式、过滤条件各补一处。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>computed 组合派生</h2>\n    <p>总价：￥{{ total }}　均价：￥{{ avg }}</p>\n    <p class=\"cap\">贵过 5 元的：</p>\n    <ul>\n      <li v-for=\"(f, i) in expensive\" :key=\"i\">{{ f.name }} ￥{{ f.price }}</li>\n    </ul>\n    <button @click=\"add\">再来一份蓝莓 ￥8</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      list: [\n        { name: '青苹果', price: 6 },\n        { name: '甜橙', price: 4 }\n      ]\n    }\n  },\n  // ✎ 空1：派生数据写在哪个选项里？ \n  %%1%%: {\n    total() {\n      var s = 0\n      // ✎ 空2：把每一项价格累加进 s \n      this.list.forEach(function (f) { %%2%% })\n      return s\n    },\n    avg() {\n      // ✎ 空3：平均值 = 总价 ÷ 数量 \n      return Math.round(%%3%%)\n    },\n    expensive() {\n      // ✎ 空4：过滤出价格高于 5 的项 \n      return this.list.filter(function (f) { return %%4%% })\n    }\n  },\n  methods: {\n    add() {\n      this.list.push({ name: '蓝莓', price: 8 })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\np { font-size: 15px; }\n.cap { color: #888; font-size: 13px; }\nli { font-size: 14px; line-height: 1.9; }\nbutton { margin-top: 8px; padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "computed"
+        ],
+        "tip": "派生数据写在哪个选项里？"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "s += f.price",
+          "s = s + f.price"
+        ],
+        "tip": "把每一项价格累加进 s"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.total / this.list.length"
+        ],
+        "tip": "平均值 = 总价 ÷ 数量"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "f.price > 5"
+        ],
+        "tip": "过滤出价格高于 5 的项"
+      }
+    ]
+  },
+  {
+    "id": "q20-getset",
+    "group": "四、计算属性与侦听器",
+    "name": "computed 的 get 与 set",
+    "desc": "可写计算属性",
+    "score": 10,
+    "require": "把 quanMing 写成对象形式的计算属性：读的时候拼全名，写的时候拆回姓和名。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>computed 读写</h2>\n    <input v-model=\"quanMing\" placeholder=\"直接在框里改全名\" />\n    <p>姓：{{ xing }}　名：{{ ming }}</p>\n    <p class=\"tip\">quanMing 没有存在 data 里，写它会拆进姓和名</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { xing: '张', ming: '三' }\n  },\n  computed: {\n    quanMing: {\n      // ✎ 空1：读取计算属性时执行的方法名（带括号） \n      %%1%% {\n        return this.xing + this.ming\n      },\n      // ✎ 空2：给计算属性赋值时执行的方法 \n      %%2%% {\n        // ✎ 空3：取第一个字作为姓 \n        this.xing = %%3%%\n        // ✎ 空4：取剩下的部分作为名 \n        this.ming = %%4%% || '氏'\n      }\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\ninput { width: 100%; padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; }\np { font-size: 14px; }\n.tip { color: #999; font-size: 12px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "get()"
+        ],
+        "tip": "读取计算属性时执行的方法名（带括号）"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "set(v)",
+          "set(value)"
+        ],
+        "tip": "给计算属性赋值时执行的方法"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v.charAt(0)",
+          "v[0]"
+        ],
+        "tip": "取第一个字作为姓"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "v.slice(1)",
+          "v.substring(1)"
+        ],
+        "tip": "取剩下的部分作为名"
+      }
+    ]
+  },
+  {
+    "id": "q21-watchobj",
+    "group": "四、计算属性与侦听器",
+    "name": "watch 对象写法与 immediate",
+    "desc": "deep / immediate / handler",
+    "score": 10,
+    "require": "侦听 user 对象内部变化：需要深侦听、立即执行一次，并补上处理函数名。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>watch 进阶写法</h2>\n    <button @click=\"change\">切换城市</button>\n    <p>城市：{{ user.city }}</p>\n    <p class=\"log\">{{ log }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { user: { city: '杭州' }, log: '' }\n  },\n  watch: {\n    user: {\n      // ✎ 空1：对象内部属性变化也要触发 → ？ \n      %%1%%,\n      // ✎ 空2：初始化时先执行一次 → ？ \n      %%2%%,\n      // ✎ 空3：对象写法里放处理函数的字段名 \n      %%3%%(nv) {\n        this.log = 'handler 看到：' + nv.city\n      }\n    }\n  },\n  methods: {\n    change() {\n      this.user.city = this.user.city === '杭州' ? '成都' : '杭州'\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nbutton { padding: 8px 16px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\np { font-size: 14px; }\n.log { color: #1c7c54; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "deep: true"
+        ],
+        "tip": "对象内部属性变化也要触发 → ？"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "immediate: true"
+        ],
+        "tip": "初始化时先执行一次 → ？"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "handler"
+        ],
+        "tip": "对象写法里放处理函数的字段名"
+      }
+    ]
+  },
+  {
+    "id": "q22-propsdefault",
+    "group": "五、组件化",
+    "name": "props 对象写法与默认值",
+    "desc": "不传值时走 default",
+    "score": 10,
+    "require": "子组件用对象形式声明 props 并给出默认值；模板里把 prop 当类名和文字用。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>props 默认值</h2>\n    <div class=\"row\"><badge></badge><span>一个参数都没传</span></div>\n    <div class=\"row\"><badge text=\"已完成\" tone=\"ok\"></badge><span>传了 text 与 tone</span></div>\n    <div class=\"row\"><badge text=\"待处理\" tone=\"warn\"></badge><span>同一组件第二个用法</span></div>\n  </div>\n</template>\n<script>\nvar Badge = {\n  // ✎ 空1：子组件声明可接收属性的选项名 \n  %%1%%: {\n    // ✎ 空2：父组件不传值时的兜底写法 \n    text: { %%2%% },\n    tone: { default: 'muted' }\n  },\n  // ✎ 空3：把 tone 这个 prop 直接当类名绑定 \n  // ✎ 空4：插值显示 text 属性 \n  template: '<span class=\"tag\" %%3%%>%%4%%</span>'\n}\nexport default {\n  components: { 'badge': Badge }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.row { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13px; color: #666; }\n.tag { padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #fff; }\n.ok { background: #2f9e7d; }\n.warn { background: #e8590c; }\n.muted { background: #8b93a7; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "props"
+        ],
+        "tip": "子组件声明可接收属性的选项名"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "default: '未命名'",
+          "default: \"未命名\""
+        ],
+        "tip": "父组件不传值时的兜底写法"
+      },
+      {
+        "i": 3,
+        "answers": [
+          ":class=\"tone\"",
+          "v-bind:class=\"tone\""
+        ],
+        "tip": "把 tone 这个 prop 直接当类名绑定"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "{{ text }}"
+        ],
+        "tip": "插值显示 text 属性"
+      }
+    ]
+  },
+  {
+    "id": "q23-comp-parent",
+    "group": "五、组件化",
+    "name": "子组件展示 + 父组件汇总",
+    "desc": "props 传值与 computed 配合",
+    "score": 10,
+    "require": "父组件循环渲染子组件并逐项传值，底部用计算属性汇总；补全声明、注册、传参与使用。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>组件与计算属性配合</h2>\n    <!-- ✎ 空3：把当前项名字传给子组件 name  -->\n    <fruit-row v-for=\"(f, i) in list\" :key=\"i\" %%3%% :price=\"f.price\"></fruit-row>\n    <!-- ✎ 空4：汇总值来自计算属性 avg  -->\n    <p class=\"sum\">共 {{ list.length }} 种，均价 ￥%%4%%</p>\n  </div>\n</template>\n<script>\nvar FruitRow = {\n  // ✎ 空1：子组件声明接收哪些属性 \n  %%1%%: ['name', 'price'],\n  template: '<div class=\"row\"><span>{{ name }}</span><b>￥{{ price }}</b></div>'\n}\nexport default {\n  // ✎ 空2：父组件注册局部组件的选项名 \n  %%2%%: { 'fruit-row': FruitRow },\n  data() {\n    return {\n      list: [\n        { name: '青苹果', price: 6 },\n        { name: '甜橙', price: 4 },\n        { name: '沙糖桔', price: 5 }\n      ]\n    }\n  },\n  computed: {\n    avg() {\n      var s = 0\n      this.list.forEach(function (f) { s += f.price })\n      return Math.round(s / this.list.length)\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.row { display: flex; justify-content: space-between; padding: 10px 12px; margin-top: 8px; background: #f6f8fa; border-radius: 8px; font-size: 14px; }\n.sum { margin-top: 12px; color: #1c7c54; font-size: 14px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "props"
+        ],
+        "tip": "子组件声明接收哪些属性"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "components"
+        ],
+        "tip": "父组件注册局部组件的选项名"
+      },
+      {
+        "i": 3,
+        "answers": [
+          ":name=\"f.name\"",
+          "v-bind:name=\"f.name\""
+        ],
+        "tip": "把当前项名字传给子组件 name"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "{{ avg }}"
+        ],
+        "tip": "汇总值来自计算属性 avg"
+      }
+    ]
+  },
+  {
+    "id": "q24-radio",
+    "group": "六、表单与 v-model 进阶",
+    "name": "单选按钮组",
+    "desc": "radio 共用一个数据",
+    "score": 10,
+    "require": "三个选项共用一个数据：补出 input 类型、写死的候选值、双向绑定，以及“未选中”的初值。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>单选按钮组</h2>\n    <!-- ✎ 空1：第一行：单选按钮的 input 类型  -->\n    <!-- ✎ 空2：选中这一项时写入数据的值  -->\n    <!-- ✎ 空3：三个按钮绑定同一个数据才能互斥  -->\n    <label><input %%1%% %%2%% %%3%% /> 青苹果</label>\n    <label><input type=\"radio\" value=\"甜橙\" v-model=\"fruit\" /> 甜橙</label>\n    <label><input type=\"radio\" value=\"沙糖桔\" v-model=\"fruit\" /> 沙糖桔</label>\n    <p>你选了：{{ fruit || '还没选' }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    // ✎ 空4：初始不选中，值为？ \n    return { %%4%% }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nlabel { display: block; font-size: 14px; line-height: 2; color: #444; }\np { margin-top: 12px; color: #2f9e7d; font-size: 14px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "type=\"radio\"",
+          "type='radio'"
+        ],
+        "tip": "第一行：单选按钮的 input 类型"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "value=\"青苹果\"",
+          "value='青苹果'"
+        ],
+        "tip": "选中这一项时写入数据的值"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-model=\"fruit\"",
+          "v-model='fruit'"
+        ],
+        "tip": "三个按钮绑定同一个数据才能互斥"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "fruit: ''",
+          "fruit: \"\""
+        ],
+        "tip": "初始不选中，值为？"
+      }
+    ]
+  },
+  {
+    "id": "q25-select-check",
+    "group": "六、表单与 v-model 进阶",
+    "name": "下拉框与复选清单",
+    "desc": "select 与 checkbox 数组",
+    "score": 10,
+    "require": "下拉框绑单值、复选框组绑数组；补两处 v-model、占位 option 的值与数组初值。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>下拉框与多选</h2>\n    <!-- ✎ 空1：下拉框双向绑定到 city  -->\n    <select %%1%%>\n      <!-- ✎ 空2：占位项：值为空串的 option  -->\n      %%2%%\n      <option v-for=\"(c, i) in cities\" :key=\"i\" :value=\"c\">{{ c }}</option>\n    </select>\n    <p>当前城市：{{ city || '—' }}</p>\n    <div class=\"box\">\n      <label v-for=\"(t, i) in tasks\" :key=\"i\">\n        <!-- ✎ 空3：多个复选框共用一个数组  -->\n        <input type=\"checkbox\" :value=\"t\" %%3%% /> {{ t }}\n      </label>\n    </div>\n    <p class=\"sum\">已完成 {{ done.length }} 项</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return {\n      city: '',\n      cities: ['杭州', '成都', '西安'],\n      tasks: ['预习课件', '完成练习', '提交报告'],\n      // ✎ 空4：多选框组的初值是？ \n      %%4%%\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\nselect { width: 100%; padding: 9px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; }\n.box { margin-top: 12px; padding: 10px 12px; background: #f6f8fa; border-radius: 10px; }\nlabel { display: block; font-size: 14px; line-height: 2; }\np { font-size: 14px; color: #2f9e7d; }\n.sum { font-weight: 600; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "v-model=\"city\"",
+          "v-model='city'"
+        ],
+        "tip": "下拉框双向绑定到 city"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "<option value=\"\">请选择城市</option>"
+        ],
+        "tip": "占位项：值为空串的 option"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "v-model=\"done\"",
+          "v-model='done'"
+        ],
+        "tip": "多个复选框共用一个数组"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "done: []"
+        ],
+        "tip": "多选框组的初值是？"
+      }
+    ]
+  },
+  {
+    "id": "q26-reactive",
+    "group": "七、响应式更新与实例 API",
+    "name": "数组变异与 $set / $nextTick",
+    "desc": "增删改与更新时机",
+    "score": 10,
+    "require": "数组用变异方法触发更新，对象新增字段要走实例 API，异步回调读更新后的状态。",
+    "code": "<template>\n  <div class=\"page\">\n    <h2>数组与对象更新</h2>\n    <p class=\"list\">{{ list.join(' / ') }}</p>\n    <div class=\"row\">\n      <!-- ✎ 空1：尾部追加一项  -->\n      <button @click=\"%%1%%('丁')\">push</button>\n      <!-- ✎ 空2：按位置删除用哪个方法  -->\n      <button @click=\"%%2%%(1, 1)\">删第二项</button>\n      <button @click=\"list.reverse()\">reverse</button>\n    </div>\n    <button class=\"wide\" @click=\"addKey\">用 $set 给对象加字段</button>\n    <p class=\"tip\">obj.k2：{{ obj.k2 || '尚未添加' }}</p>\n    <p class=\"tip\">$nextTick 里累加的计数：{{ tick }}</p>\n  </div>\n</template>\n<script>\nexport default {\n  data() {\n    return { list: ['甲', '乙', '丙'], obj: { k1: 'A' }, tick: 0 }\n  },\n  methods: {\n    addKey() {\n      var self = this\n      // ✎ 空3：给已存在的对象新增响应式字段的 API \n      %%3%%(this.obj, 'k2', '由 $set 添加')\n      // ✎ 空4：等 DOM 更新完再执行的 API \n      %%4%%(function () {\n        self.tick++\n      })\n    }\n  }\n}\n</script>\n<style>\n.page { padding: 20px; }\nh2 { color: #2f9e7d; margin-top: 0; }\n.list { font-size: 16px; font-weight: 600; }\nbutton { padding: 7px 12px; margin-right: 6px; border: none; border-radius: 8px; background: #2f9e7d; color: #fff; cursor: pointer; }\n.wide { display: block; margin-top: 10px; }\n.tip { color: #666; font-size: 13px; }\n</style>",
+    "blanks": [
+      {
+        "i": 1,
+        "answers": [
+          "list.push"
+        ],
+        "tip": "尾部追加一项"
+      },
+      {
+        "i": 2,
+        "answers": [
+          "list.splice"
+        ],
+        "tip": "按位置删除用哪个方法"
+      },
+      {
+        "i": 3,
+        "answers": [
+          "this.$set",
+          "$set"
+        ],
+        "tip": "给已存在的对象新增响应式字段的 API"
+      },
+      {
+        "i": 4,
+        "answers": [
+          "this.$nextTick",
+          "$nextTick"
+        ],
+        "tip": "等 DOM 更新完再执行的 API"
+      }
+    ]
+  }
+];
